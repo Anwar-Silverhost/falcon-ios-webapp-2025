@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Falcon</title>
+    <link rel="shortcut icon" href="{% static 'logo/favicon.svg' %}" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'logo/favicon.svg' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'logo/favicon.svg' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'logo/favicon.svg' %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'logo/favicon.svg' %}">
+    <meta name="msapplication-TileImage" content="{% static 'logo/favicon.svg' %}">
+    <meta name="theme-color" content="#ffffff">
+    <script src="{% static 'simplebar.min.js' %}"></script>
+    <script src="{% static 'js/config.js' %}"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&amp;display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+    <link rel="stylesheet" href="{% static 'css/line.css' %}">
+    <link rel="stylesheet" href="{% static 'css/simplebar.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/theme-rtl.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/theme.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/user-rtl.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/user.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+
+</head>
+
+<body>
+    <main class="main" id="top">
+        <div class="container">
+            <div class="row flex-center min-vh-100 py-5">
+                <form action="{% url 'admin_login' %}" enctype="multipart/form-data" method="post"
+                    class="col-sm-10 col-md-8 col-lg-5 col-xl-5 col-xxl-3">
+                    {% csrf_token %}
+                    <a class="d-flex flex-center text-decoration-none mb-4" href="/">
+                        <div class="d-flex align-items-center fw-bolder fs-3 d-inline-block"><img
+                                src="{% static 'logo/FALCON_black_LOGO.svg' %}" alt="phoenix" width="100" /></div>
+                    </a>
+                    <div class="text-center mb-7">
+                        <h3 class="text-body-highlight">Sign In</h3>
+                        <p class="text-body-tertiary">Get access to your account</p>
+                    </div>
+
+                    <div class="mb-3 text-start"><label class="form-label" for="email">Username</label>
+                        <div class="form-icon-container"><input class="form-control form-icon-input" required id="email"
+                                placeholder="Enter username" type="text" name="username" /><span
+                                class="fas fa-user text-body fs-9 form-icon"></span></div>
+                    </div>
+                    <div class="mb-3 text-start">
+                        <label class="form-label" for="password">Password</label>
+                        <div class="form-icon-container" data-password="data-password">
+                            <input class="form-control form-icon-input pe-6" placeholder="Enter password" required
+                                name="password" id="password" type="password" />
+                            <span class="fas fa-key text-body fs-9 form-icon"></span>
+                            <span class="uil uil-eye form-icon-eye" id="togglePassword"></span>
+                        </div>
+                    </div>
+                    <div class="row flex-between-center mb-4">
+
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 mb-3">Sign In</button>
+
+
+                    {% if saved_message %}
+                    <div class="alert alert-outline-danger d-flex align-items-center" id="alertMessage" role="alert">
+                        <span class="fas fa-circle-exclamation text-danger fs-2 me-3"></span>
+                        <p class="mb-0 flex-1">Invalid Username/Password</p>
+                        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            setTimeout(function () {
+                                var alertMessage = document.getElementById("alertMessage");
+                                if (alertMessage) {
+                                    alertMessage.classList.add('fade-out');
+                                }
+                            }, 3000);
+                        });
+                    </script>
+                    <style>
+                        .fade-out {
+                            opacity: 0;
+                            transition: opacity 0.5s ease-out;
+                        }
+                    </style>
+                    {% endif %}
+
+
+
+                </form>
+
+
+
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            const passwordInput = document.getElementById('password');
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.classList.toggle('uil-eye-slash'); // Toggle icon
+        });
+    </script>
+
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/anchor.min.js' %}"></script>
+    <script src="{% static 'js/is.min.js' %}"></script>
+    <script src="{% static 'js/all.min.js' %}"></script>
+    <script src="{% static 'js/lodash.min.js' %}"></script>
+    <script src="{% static 'js/list.min.js' %}"></script>
+    <script src="{% static 'js/feather.min.js' %}"></script>
+    <script src="{% static 'js/dayjs.min.js' %}"></script>
+    <script src="{% static 'js/phoenix.js' %}"></script>
+    <script src="{% static 'js/crm-dashboard.js' %}"></script>
+    <script src="{% static 'js/imagesloaded.pkgd.min.js' %}"></script>
+</body>
+
+</html>

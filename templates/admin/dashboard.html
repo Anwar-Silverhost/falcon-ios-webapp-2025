@@ -1,0 +1,202 @@
+{% extends 'admin/admin_navbar.html' %}
+{% block content %}
+{% load static %}
+
+ 
+
+<style>
+    .centered-image {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0.05;
+        width: 30%;
+    }
+</style>
+
+
+
+<div class="content">
+    <div class="card mb-5">
+        <div class="px-3 mb-5 mt-5">
+            <div class="row justify-content-between">
+                <div
+                    class="col-6 col-md-4 col-xxl-2 text-center border-translucent border-start-xxl border-end-xxl-0 border-bottom-xxl-0 border-end border-bottom pb-4 pb-xxl-0 ">
+                    <span class="uil fs-3 lh-1 uil-users-alt text-primary"></span>
+                    <h1 class="fs-3 pt-3">{{user_count}}</h1>
+                    <a href="{% url 'users' %}" class="fs-9 mb-0">Users</a>
+                </div>
+                <div
+                    class="col-6 col-md-4 col-xxl-2 text-center border-translucent border-start-xxl border-end-xxl-0 border-bottom-xxl-0 border-end-md border-bottom pb-4 pb-xxl-0">
+                    <span class="uil fs-3 lh-1 uil-file-alt text-info"></span>
+                    <h1 class="fs-3 pt-3">{{files_count}}</h1>
+                    <a href="{% url 'filemanager' %}" class="fs-9 mb-0">Files</a>
+                </div>
+                <div
+                    class="col-6 col-md-4 col-xxl-2 text-center border-translucent border-start-xxl border-bottom-xxl-0 border-bottom border-end border-end-md-0 pb-4 pb-xxl-0 pt-4 pt-md-0">
+                    <span class="uil fs-3 lh-1 uil-folder text-primary"></span>
+                    <h1 class="fs-3 pt-3">{{category_count}}</h1>
+                    <a href="{% url 'category' %}" class="fs-9 mb-0">Category</a>
+                </div>
+                <div
+                    class="col-6 col-md-4 col-xxl-2 text-center border-translucent border-start-xxl border-end-md border-end-xxl-0 border-bottom border-bottom-md-0 pb-4 pb-xxl-0 pt-4 pt-xxl-0">
+                    <span class="uil fs-3 lh-1 uil-apps text-info"></span>
+                    <h1 class="fs-3 pt-3">{{desig_count}}</h1>
+                    <a href="{% url 'designation' %}" class="fs-9 mb-0">Designation</a>
+                </div>
+                <div
+                    class="col-6 col-md-4 col-xxl-2 text-center border-translucent border-start-xxl border-end border-end-xxl-0 pb-md-4 pb-xxl-0 pt-4 pt-xxl-0">
+                    <span class="uil fs-3 lh-1 uil-align-left text-success"></span>
+                    <h1 class="fs-3 pt-3">{{group_count}}</h1>
+                    <a href="{% url 'groups' %}" class="fs-9 mb-0">Aircraft type</a>
+                </div>
+                <div
+                    class="col-6 col-md-4 col-xxl-2 text-center border-translucent border-start-xxl border-end-xxl pb-md-4 pb-xxl-0 pt-4 pt-xxl-0">
+                    <span class="uil fs-3 lh-1 uil-tablet text-danger"></span>
+                    <h1 class="fs-3 pt-3">{{live_count}}</h1>
+                    <a class="fs-9 mb-0">Online</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="position-relative" style="display: contents;">
+        <img src="../../static/logo/favicon.svg" alt="Centered Image" class="centered-image">
+    </div>
+
+    <div class="row ">
+        <div class="  col-md-12 ">
+            <h4 class="mb-5">Recent Activity</h4>
+            <div class="row">
+                <div class="col-md-12">
+
+                    {% for n in notify %} 
+                        <div class="card border border-start border-4 border-0 mb-3
+                        {% if n.color == 'success' %}
+                        border-success
+                        {% elif n.color == 'danger' %}
+                        border-danger
+                        {% elif n.color == 'info' %}
+                        border-info
+                        {% else %}
+                        border-warning 
+                        {% endif %} ">
+                            <div class="card-body">
+                                <div class="row d-flex align-items-center">
+                                    <div class="col">
+                                        <h5 class="text-capitalize " style="font-weight: 500 !important;">{{n.notification}}</h5>
+                                    </div>
+                                    <div class="col-auto">
+                                        <span>{{n.created_at}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                    {% endfor %}
+
+
+
+
+
+
+                </div>
+            </div>
+
+
+
+        </div>
+
+        <!-- <div class=" col-md-3 ">
+            <div class="card">
+
+            </div>
+        </div> -->
+
+    </div>
+
+
+
+
+
+
+
+
+</div>
+
+
+
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="liveToast" class="toast slide-in-right align-items-center text-bg-success border-0" role="alert"
+        aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                Login success
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+
+
+{% if saved_message == 'login_success' %}
+
+<style>
+    div#liveToast{ 
+    border-left: 4px solid #5cb85c !important; 
+}
+</style>
+
+<script>
+    window.onload = function () {
+        const toastLiveExample = document.getElementById('liveToast');
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+        toastBootstrap.show();
+    };
+</script>
+
+{% endif %}
+
+
+
+<style>
+    .slide-in-right {
+        transform: translateX(100%);
+        animation: slide-in 1s forwards;
+    }
+
+    @keyframes slide-in {
+        from {
+            transform: translateX(100%);
+        }
+
+        to {
+            transform: translateX(0);
+        }
+    }
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    var navLink = document.getElementById('nav1');
+    navLink.classList.add('active');
+</script>
+{% endblock %}

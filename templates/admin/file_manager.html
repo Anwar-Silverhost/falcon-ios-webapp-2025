@@ -1,0 +1,309 @@
+{% extends 'admin/admin_navbar.html' %}
+{% block content %}
+{% load static %}
+
+<style>
+    .avatar .avatar-name {
+        color: #AA182C !important;
+        background-color: #eeeeee !important;
+    }
+</style>
+
+
+
+
+<div class="content">
+
+    <div class="bg-body-emphasis">
+        <div id="projectSummary"
+            data-list='{"valueNames":["pdfname","group","category","uploaded","status","action"],"page":10,"pagination":true}'>
+ 
+
+            <div class="row align-items-end justify-content-between pb-5 g-3">
+                <div class="col-auto">
+                    <h2 class="mb-0">File Manager</h2> 
+                </div>
+                <div class="col-12 col-md-auto">
+                    <div class="row g-2 gy-3">
+                        <div class="col-auto flex-1">
+                            <div class="search-box">
+                                <form class="position-relative"><input
+                                        class="form-control search-input search form-control-sm" type="search"
+                                        placeholder="Search" aria-label="Search" />
+                                    <span class="fas fa-search search-box-icon"></span>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-auto"> 
+                            
+                            <!-- <button
+                                class="btn btn-sm btn-phoenix-secondary bg-body-emphasis bg-body-hover action-btn me-1"
+                                type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true"
+                                aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h"
+                                    data-fa-transform="shrink-2"></span></button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#">Action</a></li>
+                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            </ul> -->
+
+
+                            <a href="{% url 'fileupload' %}" class="btn btn-sm btn-primary text-white"><span
+                                    class="fas fa-plus me-2"></span>Upload File</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <div class="table-responsive mx-n1 px-1 scrollbar">
+                <form id="delete-multiple-files-form" method="POST" action="{% url 'delete_multiple_files' %}">
+                    {% csrf_token %}
+                    <div class="text-end">
+                        <button type="submit" id="delete-all" class="btn btn-primary btn-sm mb-3" hidden>Delete Selected</button>
+                    </div>
+                  
+                <table class="table fs-9 mb-0 border-top border-translucent">
+                    <thead>
+                        <tr>
+                             <th class="sort white-space-nowrap align-middle ps-0" scope="col">
+                                <input class="me-2" type="checkbox" id="select-all" />
+                            </th>
+                            <th></th>
+                            <th class="sort white-space-nowrap align-middle ps-0" scope="col" data-sort="pdfname"
+                                style="width:30%;">PDF NAME</th>
+                            
+                            <th class="sort align-middle ps-3" scope="col" data-sort="group" style="width:20%;">AIRCRAFT TYPE</th>
+                            <th class="sort align-middle ps-3" scope="col" data-sort="category" style="width:30%;">
+                                CATEGORY</th>
+                                       <th class="sort align-middle ps-3" scope="col" data-sort="author" style="width:30%;">
+                                    AUTHOR</th>
+                            <th class="sort align-middle ps-3" scope="col" data-sort="uploaded" style="width:12%;">
+                                UPLOADED</th> 
+                            <th class="align-middle ps-8" scope="col" data-sort="status" style="width:15%;">STATUS</th>
+                            <th class="sort align-middle text-end" scope="col" style="width:10%;"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="list" id="project-summary-table-body">
+
+                        {% for pdf in pdffiles %}
+
+                        <div class="modal fade" id="deletefile_{{pdf.id}}" tabindex="3" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div  class="modal-content">
+                                    {% csrf_token %}
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Remove?</h5><button
+                                            class="btn btn-close p-1" type="button" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h4>
+                                            Are you sure you want to delete this file?
+                                        </h4>
+                                        
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a href="{% url 'delete_file' pdf.id %}" class="btn btn-primary text-white"
+                                            type="button">Delete</a>
+                                            <button class="btn btn-outline-primary" type="button"
+                                            data-bs-dismiss="modal">Cancel</button></div>
+                                    </div>
+                            </div>
+                        </div>
+        
+                           
+
+                        <tr class="position-static"> 
+                        <td class="align-middle time white-space-nowrap ps-0">
+                                <!--<input  type="checkbox" class="file-checkbox me-3" name="file_ids" value="{{ pdf.id }}" />-->
+                                  {% if pdf.author.id == a.id or a.is_superuser %}
+                                <input type="checkbox" class="file-checkbox me-3" name="file_ids" value="{{ pdf.id }}" />
+                                {% endif %}
+                            </td>
+                            <td class="align-middle time white-space-nowrap ps-0 ">
+                                <div class="avatar avatar-l">
+                                    <div class="avatar-name">
+                                        <span class="text-uppercase">
+                                            <i class="far fa-folder"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td class="align-middle time white-space-nowrap ps-0 pdfname">
+                                <a class="fw-bold fs-8" href="{% url 'viewfile' pdf.id %}">{{pdf.pdf_name}}</a>
+                            </td>
+
+         
+                            <td class="align-middle white-space-nowrap group ps-3">
+                                <p class="mb-0 fs-9 text-body">{{pdf.group_is}}</p>
+                            </td>
+                            <td class="align-middle white-space-nowrap category ps-3">
+                                <p class="mb-0 fs-9 text-body">{{pdf.category_is}}</p>
+                            </td>
+                               <td class="align-middle white-space-nowrap uploaded ps-3">
+                                <p class="mb-0 fs-9 text-body">ID: {{pdf.author.id}} | {{pdf.author.first_name}}</p>
+                            </td>
+                            <td class="align-middle white-space-nowrap uploaded ps-3">
+                                <p class="mb-0 fs-9 text-body">{{pdf.created_at}}</p>
+                            </td>
+                             
+                            <td class="align-middle white-space-nowrap status ps-8">
+                                {% if pdf.status == '1' %}
+                                <span
+                                    class="badge badge-phoenix badge-phoenix-success me-2">Active</span>
+                                {% elif pdf.status == '0' %}
+                                <span
+                                    class="badge badge-phoenix badge-phoenix-danger me-2">Inactive</span>
+                                {% else %}
+                                <span
+                                    class="badge badge-phoenix badge-phoenix-secondary">Hide</span>
+                                {% endif %}
+                            </td>
+                            <td class="align-middle text-end white-space-nowrap pe-0 action">
+                                <div class="btn-reveal-trigger position-static"><button
+                                        class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10"
+                                        type="button" data-bs-toggle="dropdown" data-boundary="window"
+                                        aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span
+                                            class="fas fa-ellipsis-h fs-10"></span></button>
+                                    <div class="dropdown-menu dropdown-menu-end py-2"><a type="button" class="dropdown-item"
+                                        href="{% url 'viewfile' pdf.id %}">View</a>
+                                        <a type="button" target="_blank" class="dropdown-item" href="{{pdf.pdf_file.url}}">View Pdf File</a>
+                                        <div class="dropdown-divider"></div>
+                                        <!--<a class="dropdown-item text-danger" type="button" data-bs-toggle="modal"-->
+                                        <!--data-bs-target="#deletefile_{{pdf.id}}" >Remove</a>-->
+                                                {% if pdf.author.id == a.id or a.is_superuser %} 
+                                            <a class="dropdown-item text-danger" type="button" data-bs-toggle="modal" data-bs-target="#deletefile_{{pdf.id}}" >Remove</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+                </form>
+            </div>
+            
+            
+            <div class="row align-items-center justify-content-between py-2 pe-0 fs-9">
+                <div class="col-auto d-flex">
+                    <p class="mb-0 d-none d-sm-block me-3 fw-semibold text-body" data-list-info="data-list-info"></p><a
+                        class="fw-semibold" href="#!" data-list-view="*">View all<span class="fas fa-angle-right ms-1"
+                            data-fa-transform="down-1"></span></a><a class="fw-semibold d-none" href="#!"
+                        data-list-view="less">View Less<span class="fas fa-angle-right ms-1"
+                            data-fa-transform="down-1"></span></a>
+                </div>
+                <div class="col-auto d-flex"><button class="page-link" data-list-pagination="prev"><span
+                            class="fas fa-chevron-left"></span></button>
+                    <ul class="mb-0 pagination"></ul><button class="page-link pe-0" data-list-pagination="next"><span
+                            class="fas fa-chevron-right"></span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+            <script>
+                document.getElementById('select-all').addEventListener('change', function () {
+                    const checkboxes = document.querySelectorAll('.file-checkbox');
+                    const deleteButton = document.getElementById('delete-all');
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = this.checked;
+                    }); 
+                    deleteButton.hidden = !this.checked;
+                });
+
+                document.querySelectorAll('.file-checkbox').forEach(checkbox => {
+                    checkbox.addEventListener('change', function () {
+                        const deleteButton = document.getElementById('delete-all');
+                        const anyChecked = Array.from(document.querySelectorAll('.file-checkbox')).some(cb => cb.checked);
+                        deleteButton.hidden = !anyChecked;  
+                    });
+                }); 
+            </script>
+
+
+
+
+    <footer class="footer position-absolute">
+        <div class="row g-0 justify-content-between align-items-center h-100">
+            <div class="col-12 col-sm-auto text-center">
+                <p class="mb-0 mt-2 mt-sm-0 text-body">Falcon iOS Application<span
+                        class="d-none d-sm-inline-block"></span><span class="d-none d-sm-inline-block mx-1">|</span><br
+                        class="d-sm-none" />2024 ~ <span id="year"></span><script>document.getElementById("year").textContent = new Date().getFullYear();</script> &copy; </p>
+            </div>
+            <div class="col-12 col-sm-auto text-center">
+                <p class="mb-0 text-body-tertiary text-opacity-85">v1</p>
+            </div>
+        </div>
+    </footer>
+
+
+</div>
+
+
+
+
+{% if saved_message %}
+
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="liveToast" class="toast slide-in-right align-items-center text-bg-primary border-0" role="alert"
+        aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                {{saved_message}}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.onload = function () {
+        const toastLiveExample = document.getElementById('liveToast');
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+        toastBootstrap.show();
+    };
+</script>
+
+{% endif %}
+
+
+
+<style>
+    .slide-in-right {
+        transform: translateX(100%);
+        animation: slide-in 1s forwards;
+    }
+
+    @keyframes slide-in {
+        from {
+            transform: translateX(100%);
+        }
+
+        to {
+            transform: translateX(0);
+        }
+    }
+</style>
+
+
+
+
+
+
+
+
+
+<script>
+    var navLink = document.getElementById('nav6');
+    navLink.classList.add('active');
+</script>
+{% endblock %}

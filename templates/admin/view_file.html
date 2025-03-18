@@ -1,0 +1,596 @@
+{% extends 'admin/admin_navbar.html' %}
+{% block content %}
+{% load static %}
+
+{% if pdf %}
+
+
+<div class="content">
+    <div class="pb-9">
+        <div class="row align-items-center justify-content-between g-3 mb-4">
+            <div class="col-12 col-md-auto">
+                <h2 class="mb-0">File details</h2>
+            </div>
+            <div class="col-12 col-md-auto d-flex">
+  {% if pdf.author.id == a.id or a.is_superuser %} 
+               
+               
+
+                <div class="modal fade" id="deletefile" tabindex="3" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            {% csrf_token %}
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Remove?</h5><button
+                                    class="btn btn-close p-1" type="button" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <h4>
+                                    Are you sure you want to delete this file?
+                                </h4>
+
+                            </div>
+                            <div class="modal-footer">
+                                <a href="{% url 'delete_file' pdf.id %}" class="btn btn-primary text-white"
+                                    type="button">Delete</a>
+                                <button class="btn btn-outline-primary" type="button"
+                                    data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <button class="btn btn-phoenix-danger me-2" type="button" data-bs-toggle="modal"
+                    data-bs-target="#deletefile"><span class="fa-solid fa-trash me-2"></span><span>Delete
+                        File</span></button>
+
+                <!-- updtane name -->
+                <div class="modal fade" id="editname" tabindex="3" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <form action="{% url 'update_details_pdf' pdf.id %}?type=1" method="post"
+                            enctype="multipart/form-data" class="modal-content">
+                            {% csrf_token %}
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Update PDF Name</h5><button
+                                    class="btn btn-close p-1" type="button" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <input type="text" class="form-control form-control-lg" name="pdfname" id=""
+                                    value="{{pdf.pdf_name}}">
+                            </div>
+                            <div class="modal-footer"><button class="btn btn-primary"
+                                    type="submit">Update</button><button class="btn btn-outline-primary" type="button"
+                                    data-bs-dismiss="modal">Cancel</button></div>
+                        </form>
+                    </div>
+                </div>
+                <!-- update file -->
+                <div class="modal fade" id="editfile" tabindex="3" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <form action="{% url 'update_details_pdf' pdf.id %}?type=2" method="post"
+                            enctype="multipart/form-data" class="modal-content">
+                            {% csrf_token %}
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Update PDF File</h5><button
+                                    class="btn btn-close p-1" type="button" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <input type="file" name="pdffile" class="form-control form-control-lg" id=""
+                                    accept=".pdf,.csv,.docx" required>
+                            </div>
+                            <div class="modal-footer"><button class="btn btn-primary"
+                                    type="submit">Update</button><button class="btn btn-outline-primary" type="button"
+                                    data-bs-dismiss="modal">Cancel</button></div>
+                        </form>
+                    </div>
+                </div>
+
+
+                <!-- update group -->
+
+
+                <div class="modal fade" id="editgroup" tabindex="3" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <form action="{% url 'update_details_pdf' pdf.id %}?type=3" method="post"
+                            enctype="multipart/form-data" class="modal-content">
+                            {% csrf_token %}
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Update Group</h5><button
+                                    class="btn btn-close p-1" type="button" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+
+                                <div class="mb-2 col-sm-12 col-md-12">
+                                    <div class="form-floating">
+                                        <select class="form-select" id="groupSelect" name="maingroup" required>
+                                            <option selected="selected" value="0">Select Aircraft Type</option>
+                                            {% for group in groups %}
+                                            {% if not group.parent_group %}
+                                            <option value="{{ group.id }}">{{ group.group_name }}</option>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                        <label for="groupSelect">Select User Aircraft Type</label>
+                                    </div>
+                                </div>
+
+                                <div class="mb-2 col-sm-12 col-md-12">
+                                    <div class="form-floating">
+                                        <select class="form-select" id="subGroupSelect" name="subgroup">
+                                            <option selected="selected" value="0">Select Parent Aircraft Type</option>
+                                            {% for group in groups %}
+                                            {% if group.parent_group %}
+                                            <option class="subgroup-option" data-parent="{{ group.parent_group.id }}"
+                                                value="{{ group.id }}" style="display:none;">
+                                                {{ group.group_name }}
+                                            </option>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                        <label for="subGroupSelect">Select Parent Aircraft Type</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer"><button class="btn btn-primary"
+                                    type="submit">Update</button><button class="btn btn-outline-primary" type="button"
+                                    data-bs-dismiss="modal">Cancel</button></div>
+                        </form>
+                    </div>
+                </div>
+
+
+                <!-- update category -->
+                <div class="modal fade" id="editcategory" tabindex="3" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <form action="{% url 'update_details_pdf' pdf.id %}?type=4" method="post"
+                            enctype="multipart/form-data" class="modal-content">
+                            {% csrf_token %}
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Update Category</h5><button
+                                    class="btn btn-close p-1" type="button" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+
+
+                                <div class="col-sm-6 col-md-12 mb-3">
+                                    <div class="form-floating">
+                                        <select class="form-select" id="menuSelect" name="maincategory" required>
+                                            <option selected="selected" value="0">Select menu</option>
+                                            {% for category in categories %}
+                                            {% if not category.parent_category %}
+                                            <option value="{{ category.id }}">{{ category.category_name }}</option>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                        <label for="menuSelect">Select Main Menu</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 col-md-12 mb-3">
+                                    <div class="form-floating">
+                                        <select class="form-select" id="parentCategorySelect" name="parentcategory">
+                                            <option selected="selected" value="0">Default</option>
+                                            {% for category in categories %}
+                                            {% if category.parent_category %}
+                                            <option class="parent-category-option"
+                                                data-parent="{{ category.parent_category.id }}"
+                                                value="{{ category.id }}" style="display:none;">
+                                                {{ category.category_name }}
+                                            </option>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                        <label for="parentCategorySelect">Select Parent Category</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 col-md-12 mb-3">
+                                    <div class="form-floating">
+                                        <select class="form-select" id="categorySelect" name="category">
+                                            <option selected="selected" value="0">Default</option>
+                                            {% for category in categories %}
+                                            {% if category.parent_category %}
+                                            <option class="category-option"
+                                                data-parent="{{ category.parent_category.id }}"
+                                                value="{{ category.id }}" style="display:none;">
+                                                {{ category.category_name }}
+                                            </option>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                        <label for="categorySelect">Select Category</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 col-md-12 mb-3">
+                                    <div class="form-floating">
+                                        <select class="form-select" id="subCategorySelect" name="subcategory">
+                                            <option selected="selected" value="0">Default</option>
+                                            {% for category in categories %}
+                                            {% if category.parent_category %}
+                                            <option class="sub-category-option"
+                                                data-parent="{{ category.parent_category.id }}"
+                                                value="{{ category.id }}" style="display:none;">
+                                                {{ category.category_name }}
+                                            </option>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                        <label for="subCategorySelect">Select Sub Category</label>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="modal-footer"><button class="btn btn-primary"
+                                    type="submit">Update</button><button class="btn btn-outline-primary" type="button"
+                                    data-bs-dismiss="modal">Cancel</button></div>
+                        </form>
+                    </div>
+                </div>
+
+
+
+
+                <div>
+
+                    <button class="btn px-3 btn-phoenix-secondary" type="button" data-bs-toggle="dropdown"
+                        data-boundary="window" aria-haspopup="true" aria-expanded="false"
+                        data-bs-reference="parent"><span class="far fa-edit"></span></button>
+
+
+
+
+                    <ul class="dropdown-menu dropdown-menu-end p-0" style="z-index: 9999;">
+                        <li>
+                            <a class="dropdown-item" type="button" data-bs-toggle="modal"
+                                data-bs-target="#editname">Edit Pdf Name</a>
+                        </li>
+                        <li><a class="dropdown-item" type="button" data-bs-toggle="modal"
+                                data-bs-target="#editfile">Update Pdf File</a></li>
+
+
+                        <li><a class="dropdown-item" type="button" data-bs-toggle="modal"
+                                data-bs-target="#editgroup">Update Aircraft Type</a></li>
+                        <li><a class="dropdown-item" type="button" data-bs-toggle="modal"
+                                data-bs-target="#editcategory">Update Category</a></li>
+
+                    </ul>
+                </div>
+                 {% endif %}
+            </div>
+        </div>
+        <div class="row g-4 g-xl-6">
+            <div class="col-xl-5 col-xxl-4">
+                <div class="sticky-leads-sidebar">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row align-items-center g-3">
+                                <div class="col-12 col-sm-auto flex-1">
+                                    <h3 class="fw-bolder mb-2 ">{{pdf.pdf_name}}</h3>
+                                    <div class="d-flex align-items-center mb-4 mt-3">
+                                        <p class="mb-0 me-4">{{pdf.created_at}}</p>
+                                    </div>
+                                    <div class="d-md-flex d-xl-block align-items-center justify-content-between  ">
+                                        <div class="d-flex align-items-center  ">
+
+                                            <div>
+                                                <div class="dropdown"><a
+                                                        class="text-body-secondary dropdown-toggle text-decoration-none dropdown-caret-none"
+                                                        href="#!" data-bs-toggle="dropdown" aria-expanded="false">
+
+                                                        {% if pdf.status == '1' %}
+                                                        <span
+                                                            class="badge badge-phoenix badge-phoenix-success me-2">Active</span>
+                                                        {% elif pdf.status == '0' %}
+                                                        <span
+                                                            class="badge badge-phoenix badge-phoenix-danger me-2">Inactive</span>
+                                                        {% else %}
+                                                        <span
+                                                            class="badge badge-phoenix badge-phoenix-secondary">Hide</span>
+                                                        {% endif %}
+
+
+                                                        <span
+                                                            class="fa-solid fa-caret-down text-body-secondary fs-9 ms-2"></span></a>
+                                                                       {% if pdf.author.id == a.id or a.is_superuser %} 
+                                                           
+
+                                                    <div class="dropdown-menu shadow-sm" style="min-width:20rem">
+                                                        <div class="card position-relative border-0">
+                                                            <div class="card-body p-0">
+                                                                <form class="mx-3"
+                                                                    action="{% url 'change_file_status' pdf.id %}"
+                                                                    method="post">
+                                                                    {% csrf_token %}
+                                                                    <h5 class="mb-3">Update Status</h5><select
+                                                                        class="form-select mb-3" name="status"
+                                                                        aria-label="Default select">
+                                                                        <option {% if pdf.status == '1' %} selected {% endif %} value="1">Active</option>
+                                                                        <option {% if pdf.status == '0' %} selected {% endif %} value="0">Inactive</option>
+                                                                        <option {% if pdf.status == '100' %} selected {% endif %} value="100">Hide</option>
+                                                                    </select>
+
+                                                                    <div class="text-end"><button
+                                                                            class="btn btn-link text-danger"
+                                                                            type="button">Cancel</button><button
+                                                                            class="btn btn-sm btn-primary px-5"
+                                                                            type="submit">Update</button></div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                     {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <style>
+                        .hierarchy {
+                            display: flex;
+                            flex-direction: column;
+                        }
+
+                        .level {
+                            margin-bottom: 1rem;
+                        }
+
+                        .level-header {
+                            font-weight: bold;
+                            margin-bottom: 0.5rem;
+                        }
+
+                        .level-content {
+                            padding-left: 1rem;
+                        }
+
+                        .level-content::before {
+                            content: '→ ';
+                            color: #000000;
+                            font-weight: bold;
+                        }
+
+                        .level-content span {
+                            display: inline-block;
+                        }
+                    </style>
+
+
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="hierarchy">
+                                <!-- Group Information -->
+                                <div class="level">
+                                    <div class="level-header">Aircraft type:</div>
+                                    <div class="level-content">
+                                        {% if pdf.group_is %}
+                                        {% with pdf.group_is as group %}
+                                        {% if group.parent_group %}
+                                        {{ group.parent_group.group_name }} &gt;
+                                        {% endif %}
+                                        {{ group.group_name }}
+                                        {% endwith %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+
+                                <div class="level">
+                                    <div class="level-header">Category:</div>
+                                    <div class="level-content">
+                                        {% if category_hierarchy %}
+                                        {% for category in category_hierarchy %}
+                                        {{ category.category_name }}
+                                        {% if not forloop.last %}
+                                        &gt;
+                                        {% endif %}
+                                        {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+                </div>
+            </div>
+            <div class="col-xl-7 col-xxl-8">
+                <div class="card mb-5" style="border: none;">
+                    <div class="card-body p-0">
+                        <iframe src="{{pdf.pdf_file.url}}" style="width: 100%; height: 100vh; border: none;"></iframe>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <footer class="footer position-absolute">
+        <div class="row g-0 justify-content-between align-items-center h-100">
+            <div class="col-12 col-sm-auto text-center">
+                <p class="mb-0 mt-2 mt-sm-0 text-body">Falcon iOS Application<span
+                        class="d-none d-sm-inline-block"></span><span class="d-none d-sm-inline-block mx-1">|</span><br
+                        class="d-sm-none" />2024 ~ <span id="year"></span><script>document.getElementById("year").textContent = new Date().getFullYear();</script> &copy; </p>
+            </div>
+            <div class="col-12 col-sm-auto text-center">
+                <p class="mb-0 text-body-tertiary text-opacity-85">v1</p>
+            </div>
+        </div>
+    </footer>
+
+
+</div>
+
+{% endif %}
+
+
+<script>
+    document.getElementById('groupSelect').addEventListener('change', function () {
+        var groupId = this.value;
+        var subGroupSelect = document.getElementById('subGroupSelect');
+        var subGroupOptions = document.querySelectorAll('.subgroup-option');
+        subGroupSelect.selectedIndex = 0;
+        subGroupOptions.forEach(function (option) {
+            option.style.display = 'none';
+        });
+        subGroupOptions.forEach(function (option) {
+            if (option.getAttribute('data-parent') == groupId) {
+                option.style.display = 'block';
+            }
+        });
+    });
+</script>
+<script>
+    document.getElementById('menuSelect').addEventListener('change', function () {
+        var menuId = this.value;
+        var parentCategorySelect = document.getElementById('parentCategorySelect');
+        var parentCategoryOptions = document.querySelectorAll('.parent-category-option');
+
+        resetDropdown('parentCategorySelect');
+        resetDropdown('categorySelect');
+        resetDropdown('subCategorySelect');
+
+        parentCategoryOptions.forEach(function (option) {
+            option.style.display = 'none';
+        });
+
+        parentCategoryOptions.forEach(function (option) {
+            if (option.getAttribute('data-parent') == menuId) {
+                option.style.display = 'block';
+            }
+        });
+    });
+
+    document.getElementById('parentCategorySelect').addEventListener('change', function () {
+        var parentCategoryId = this.value;
+        var categorySelect = document.getElementById('categorySelect');
+        var categoryOptions = document.querySelectorAll('.category-option');
+
+        resetDropdown('categorySelect');
+        resetDropdown('subCategorySelect');
+
+        categoryOptions.forEach(function (option) {
+            option.style.display = 'none';
+        });
+
+        categoryOptions.forEach(function (option) {
+            if (option.getAttribute('data-parent') == parentCategoryId) {
+                option.style.display = 'block';
+            }
+        });
+    });
+
+    document.getElementById('categorySelect').addEventListener('change', function () {
+        var categoryId = this.value;
+        var subCategorySelect = document.getElementById('subCategorySelect');
+        var subCategoryOptions = document.querySelectorAll('.sub-category-option');
+
+        resetDropdown('subCategorySelect');
+
+        subCategoryOptions.forEach(function (option) {
+            option.style.display = 'none';
+        });
+
+        subCategoryOptions.forEach(function (option) {
+            if (option.getAttribute('data-parent') == categoryId) {
+                option.style.display = 'block';
+            }
+        });
+    });
+
+    function resetDropdown(dropdownId) {
+        var dropdown = document.getElementById(dropdownId);
+        dropdown.selectedIndex = 0;
+    }
+</script>
+
+
+{% if saved_message %}
+
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="liveToast" class="toast slide-in-right align-items-center text-bg-primary border-0" role="alert"
+        aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                {{saved_message}}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.onload = function () {
+        const toastLiveExample = document.getElementById('liveToast');
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+        toastBootstrap.show();
+    };
+</script>
+
+{% endif %}
+
+
+
+<style>
+    .slide-in-right {
+        transform: translateX(100%);
+        animation: slide-in 1s forwards;
+    }
+
+    @keyframes slide-in {
+        from {
+            transform: translateX(100%);
+        }
+
+        to {
+            transform: translateX(0);
+        }
+    }
+</style>
+
+
+
+
+
+
+
+
+
+<script>
+    var navLink = document.getElementById('nav6');
+    navLink.classList.add('active');
+</script>
+{% endblock %}

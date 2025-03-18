@@ -1,0 +1,504 @@
+{% extends 'admin/admin_navbar.html' %}
+{% block content %}
+{% load static %}
+
+
+<div class="content">
+
+    <div class="pb-9">
+        <div class="row align-items-center justify-content-between g-3 mb-4">
+            <div class="col-12 col-md-auto">
+                <h2 class="mb-0">Manage Users</h2>
+            </div>
+
+        </div>
+        <div class="row g-4 g-xl-6">
+
+            <style>
+                table .card {
+                    border: 1px solid;
+                    padding: 5px 15px !important;
+                    margin-top: 10px;
+                    margin-bottom: 10px;
+                    border-radius: 0px !important;
+                }
+
+                td {
+                    text-overflow: clip;
+                    white-space: nowrap;
+                }
+            </style>
+
+            <div class="col-xl-8 col-xxl-8">
+                <div class="row gx-5">
+                    <div class="col-12">
+                        <div class="container mt-2 p-0">
+
+                            <div id="tableExample"
+                                data-list="{&quot;valueNames&quot;:[&quot;id&quot;,&quot;name&quot;,&quot;email&quot;,&quot;username&quot;,&quot;password&quot;,&quot;status&quot;,&quot;created&quot;,&quot;lastlogin&quot;],&quot;page&quot;:10,&quot;pagination&quot;:true}">
+                                <div class="table-responsive">
+                                    <table class="table table-sm fs-9 mb-0 table-bordered text-center">
+                                        <thead>
+                                            <tr>
+                                                <th class="sort border-top border-translucent ps-3" data-sort="id">Id
+                                                </th>
+                                                <th class="sort border-top border-translucent ps-3" data-sort="name">
+                                                    Name</th>
+                                                <th class="sort border-top border-translucent" data-sort="email">Email
+                                                </th>
+                                                <th class="sort border-top border-translucent" data-sort="password">
+                                                    Login Credentials</th>
+                                                <th class="sort border-top border-translucent" data-sort="status">Status
+                                                </th>
+                                                <!--<th class="sort border-top border-translucent" data-sort="lastlogin">-->
+                                                <!--    Last Login</th>-->
+                                                <th class="sort text-center align-middle pe-0 border-top border-translucent"
+                                                    scope="col">ACTION</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="list">
+                                            {% for au in adminusers %}
+                                            <tr>
+                                                <td class="align-middle id">{{ au.id }}</td>
+                                                <td class="align-middle name">{{ au.first_name }}</td>
+                                                <td class="align-middle email">{{ au.email }}</td>
+
+                                                <td class="align-middle password">
+                                                    <span class="password-text" hidden>{{ au.last_name }}</span>
+                                                    <button onclick="copyClientCredentials({{ au.id }})"
+                                                        class="btn btn-outline-info btn-sm copy-btn">Copy</button>
+                                                </td>
+                                                <td class="align-middle status">
+                                                    {% if au.is_active %}
+                                                    <span
+                                                        class="badge badge-phoenix badge-phoenix-success">Active</span>
+                                                    {% else %}
+                                                    <span
+                                                        class="badge badge-phoenix badge-phoenix-danger">Inactive</span>
+                                                    {% endif %}
+                                                </td>
+                                                <!--<td class="align-middle lastlogin">-->
+                                                <!--    {% if au.last_login %}-->
+                                                <!--    {{ au.last_login }}-->
+                                                <!--    {% endif %}-->
+                                                <!--</td>-->
+                                                <td class="align-middle created p-2">
+                                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                                        <button class="btn btn-sm btn-outline-warning" type="button"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#verticallyCentered_{{ au.id }}">Edit</button>
+                                                        <button class="btn btn-sm btn-outline-danger"  data-bs-toggle="modal" data-bs-target="#deleteuser_{{au.id}}"
+                                                            type="button">Delete</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+
+                                            <pre id="clientCredentials_{{ au.id }}" hidden>
+User Credentials :<br>
+Name : {{ au.first_name }}<br>
+Username : {{ au.username }}<br>
+Password : {{ au.last_name }}</pre>
+
+
+
+
+
+
+ 
+<div class="modal fade" id="deleteuser_{{au.id}}" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete user?</h5><button class="btn btn-close p-1" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-body-tertiary lh-lg mb-0">
+            Are you sure to delete the {{au.first_name}}?
+        </p>
+      </div>
+      <div class="modal-footer">
+        <a href="{% url 'delete_new_user' au.id %}" class="btn btn-primary text-white" type="button">Delete</a>
+        <button class="btn btn-outline-primary" type="button" data-bs-dismiss="modal">Cancel</button></div>
+    </div>
+  </div>
+</div>
+
+
+
+
+                                            <div class="modal fade" id="verticallyCentered_{{ au.id }}" tabindex="-1"
+                                                aria-labelledby="verticallyCenteredModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <form action="{% url 'update_new_user' au.id %}"
+                                                            method="post">
+                                                            {% csrf_token %}
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title"
+                                                                    id="verticallyCenteredModalLabel">Edit {{ au.first_name }} User</h5><button
+                                                                    class="btn btn-close p-1" type="button"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="mb-3">
+                                                                    <h6 class="mb-0 text-body-highlight mb-2">Name</h6>
+
+                                                                    <input class="form-control"
+                                                                        id="exampleFormControlInput"
+                                                                        value="{{ au.first_name }}" type="text"
+                                                                        name="name" required placeholder="Enter name" />
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <h6 class="mb-0 text-body-highlight mb-2">Email
+                                                                        address</h6>
+                                                                    <input class="form-control"
+                                                                        id="exampleFormControlInput"
+                                                                        value="{{ au.email }}" type="email"
+                                                                        name="email" required
+                                                                        placeholder="Enter email" />
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <h6 class="mb-0 text-body-highlight mb-2">Username
+                                                                    </h6>
+                                                                    <input class="form-control"
+                                                                        id="exampleFormControlInput"
+                                                                        value="{{ au.username }}" type="text"
+                                                                        name="username" required
+                                                                        placeholder="Enter username" />
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <h6 class="mb-0 text-body-highlight mb-2">Password
+                                                                    </h6>
+                                                                    <div class="input-group mb-3">
+                                                                        <input id="passwordFieldUpdate_{{ au.id }}"
+                                                                            class="form-control" type="text" required
+                                                                            value="{{ au.last_name }}"
+                                                                            placeholder="Password" aria-label="Password"
+                                                                            name="password"
+                                                                            aria-describedby="basic-addon2">
+                                                                        <span class="input-group-text cursor-pointer"
+                                                                            onclick="generatePassword('passwordFieldUpdate_{{ au.id }}')">Generate</span>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="mb-3">
+                                                                    <h6 class="mb-0 text-body-highlight mb-2">Status
+                                                                    </h6>
+
+                                                                    <select class="form-select mb-3"
+                                                                        aria-label="category" required name="status"
+                                                                        id="status">
+                                                                        <option value="True" {% if au.is_active %}selected{% endif %}>Active</option>
+                                                                        <option value="False" {% if not au.is_active %}selected{% endif %}>Inactive</option>
+                                                                    </select>
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer"><button class="btn btn-primary"
+                                                                    type="submit">Update</button><button
+                                                                    class="btn btn-outline-primary" type="button"
+                                                                    data-bs-dismiss="modal">Cancel</button></div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+
+
+
+
+
+
+
+
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+
+
+
+
+                                </div>
+                                <div class="d-flex flex-between-center pt-3">
+                                    <div class="pagination d-none">
+                                        <li class="active"><button class="page" type="button" data-i="1"
+                                                data-page="5">1</button></li>
+                                        <li><button class="page" type="button" data-i="2" data-page="5">2</button></li>
+                                        <li><button class="page" type="button" data-i="3" data-page="5">3</button></li>
+                                        <li class="disabled"><button class="page" type="button">...</button></li>
+                                    </div>
+                                    <p class="mb-0 fs-9">
+                                        <span class="d-none d-sm-inline-block" data-list-info="data-list-info">1 to 5
+                                            <span class="text-body-tertiary"> Items of </span>43</span>
+                                        <span class="d-none d-sm-inline-block"> — </span>
+                                        <a class="fw-semibold" href="#!" data-list-view="*">
+                                            View all
+                                            <svg class="svg-inline--fa fa-angle-right ms-1" data-fa-transform="down-1"
+                                                aria-hidden="true" focusable="false" data-prefix="fas"
+                                                data-icon="angle-right" role="img" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 320 512" data-fa-i2svg=""
+                                                style="transform-origin: 0.3125em 0.5625em;">
+                                                <g transform="translate(160 256)">
+                                                    <g transform="translate(0, 32)  scale(1, 1)  rotate(0 0 0)">
+                                                        <path fill="currentColor"
+                                                            d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"
+                                                            transform="translate(-160 -256)"></path>
+                                                    </g>
+                                                </g>
+                                            </svg><!-- <span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span> Font Awesome fontawesome.com -->
+                                        </a><a class="fw-semibold d-none" href="#!" data-list-view="less">
+                                            View Less
+                                            <svg class="svg-inline--fa fa-angle-right ms-1" data-fa-transform="down-1"
+                                                aria-hidden="true" focusable="false" data-prefix="fas"
+                                                data-icon="angle-right" role="img" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 320 512" data-fa-i2svg=""
+                                                style="transform-origin: 0.3125em 0.5625em;">
+                                                <g transform="translate(160 256)">
+                                                    <g transform="translate(0, 32)  scale(1, 1)  rotate(0 0 0)">
+                                                        <path fill="currentColor"
+                                                            d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"
+                                                            transform="translate(-160 -256)"></path>
+                                                    </g>
+                                                </g>
+                                            </svg><!-- <span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span> Font Awesome fontawesome.com -->
+                                        </a>
+                                    </p>
+                                    <div class="d-flex">
+                                        <button class="btn btn-sm btn-primary disabled" type="button"
+                                            data-list-pagination="prev" disabled=""><span>Previous</span></button>
+                                        <button class="btn btn-sm btn-primary px-4 ms-2" type="button"
+                                            data-list-pagination="next"><span>Next</span></button>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
+
+
+
+            <div class="col-xl-4 col-xxl-4">
+                <div class="sticky-leads-sidebar">
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="mb-5">Create New User</h5>
+                            <div class="row g-3">
+                                <form action="{% url 'save_new_user' %}" method="post" enctype="multipart/form-data"
+                                    class="col-12">
+                                    {% csrf_token %}
+
+                                    <div class="mb-3">
+                                        <h6 class="mb-0 text-body-highlight mb-2">Name</h6>
+
+                                        <input class="form-control" id="exampleFormControlInput" type="text" name="name"
+                                            required placeholder="Enter name" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <h6 class="mb-0 text-body-highlight mb-2">Email address</h6>
+                                        <input class="form-control" id="exampleFormControlInput" type="email"
+                                            name="email" required placeholder="Enter email" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <h6 class="mb-0 text-body-highlight mb-2">Username</h6>
+                                        <input class="form-control" id="exampleFormControlInput" type="text"
+                                            name="username" required placeholder="Enter username" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <h6 class="mb-0 text-body-highlight mb-2">Password</h6>
+                                        <div class="input-group mb-3">
+                                            <input id="passwordFieldCreate" class="form-control" type="text" required
+                                                placeholder="Password" aria-label="Password" name="password"
+                                                aria-describedby="basic-addon2">
+
+                                            <span class="input-group-text cursor-pointer"
+                                                onclick="generatePassword('passwordFieldCreate')">Generate</span>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <h6 class="mb-0 text-body-highlight mb-2">Status</h6>
+
+                                        <select class="form-select mb-3" aria-label="category" required name="status"
+                                            id="status">
+                                            <option value="True">Active</option>
+                                            <option value="False">Inactive</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <button class="btn btn-primary w-100" type="submit">Save</button>
+                                    </div>
+
+                                </form>
+
+
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+    <footer class="footer position-absolute">
+        <div class="row g-0 justify-content-between align-items-center h-100">
+            <div class="col-12 col-sm-auto text-center">
+                <p class="mb-0 mt-2 mt-sm-0 text-body">Falcon iOS Application<span
+                        class="d-none d-sm-inline-block"></span><span class="d-none d-sm-inline-block mx-1">|</span><br
+                        class="d-sm-none" />2024 ~ <span id="year"></span><script>document.getElementById("year").textContent = new Date().getFullYear();</script> &copy; </p>
+            </div>
+            <div class="col-12 col-sm-auto text-center">
+                <p class="mb-0 text-body-tertiary text-opacity-85">v1</p>
+            </div>
+        </div>
+    </footer>
+
+
+
+
+
+</div>
+
+<script>
+    // Function to copy client credentials
+    function copyClientCredentials(clientId) {
+        const credentialsText = document.getElementById('clientCredentials_' + clientId).innerText;
+        console.log(credentialsText);
+        // navigator.clipboard.writeText(credentialsText).then(() => {
+        //     console.log("Credentials copied to clipboard");
+        //     alert("Credentials copied to clipboard!");
+        // }).catch(err => {
+        //     console.error("Failed to copy credentials: ", err);
+        // });
+
+        // // Check if navigator.clipboard is available
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(credentialsText).then(function () {
+                alert('Credentials copied to clipboard!');
+            }).catch(function (err) {
+                console.error('Could not copy text: ', err);
+            });
+        } else {
+            // Fallback for unsupported browsers
+            const textarea = document.createElement('textarea');
+            textarea.value = credentialsText;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy'); // Fallback for older browsers
+                console.log(credentialsText);
+
+                alert('Credentials copied to clipboard!');
+            } catch (err) {
+                console.error('Could not copy text: ', err);
+            }
+            document.body.removeChild(textarea); // Clean up the temporary element
+        }
+    }
+</script>
+
+
+
+<script>
+    // function generatePassword() {
+    //     const words = ["Ace", "Act", "Adv", "Agt", "Aim", "Alt", "Api", "App", "Art", "Ask", "Ass", "Aud", "Avg", "Ban", "Bar", "Bid", "Bio", "Bot", "Buy", "Cad", "Cam", "Cap", "CEO", "CFO", "CIO", "Cmd", "Com", "Con", "Cop", "Cor", "CRM", "CTO", "Ctr", "Cur", "Cvt", "Dba", "Dec", "Def", "Dev", "Dir", "Doc", "Dos", "DRM", "Dsp", "Edu", "Eng", "Ent", "Est", "Exp", "Ext", "Faq", "Fdn", "Fin", "Fix", "Fld", "For", "Fst", "Ftr", "Fun", "Gal", "Gen", "Geo", "Gif", "Git", "Glo", "Gov", "Hcm", "Hlp", "Hms", "HRM", "Hse", "Ico", "Inc", "Ind", "Inf", "Inn", "Int", "Inv", "IOT", "IPR", "Iso", "ITs", "Job", "Key", "Kit", "Lab", "Law", "Led", "Lex", "Lgl", "Lms", "Log", "Ltd", "Mba", "Med", "Met", "Mfg", "Mgr", "Mis", "Mob", "Mod", "Mon", "Mot", "Mkt", "Mng", "Mnl", "Mrk", "Msg", "Mth", "Nav", "Net", "New", "Nft", "Nlp", "Ocr", "Oem", "Off", "Org", "Par", "Pas", "Pat", "Pdf", "Pic", "Pix", "Pln", "Pos", "Prd", "Pro", "Prt", "Pub", "Qlt", "Qms", "R&D", "Rcm", "Rec", "Ref", "Reg", "Rep", "Req", "Res", "Rev", "Rfp", "Rsa", "Saa", "Saa", "Sdk", "Seo", "Ser", "Sit", "Sme", "Soc", "Sof", "Spe", "Srv", "Ssl", "Ssw", "Stk", "Stn", "Stp", "Svc", "Sys", "Tac", "Tag", "Tap", "Tax", "Tcp", "Tek", "Tel", "Ter", "Tes", "Tgt", "Tls", "Top", "Trd", "Txt", "Uat", "Url", "UxD", "Vfx", "Vis", "Vpn", "Vrf", "Wbs", "Web", "Win", "Wit", "Wms", "Wok", "Www", "Xml", "Xls", "Yrs", "Zip"]; // Add more words if needed
+    //     const randomWord = words[Math.floor(Math.random() * words.length)];
+    //     const password = `2025@${randomWord}`;
+    //     document.getElementById("passwordField").value = password;
+    // }
+
+    function generatePassword(inputId) {
+        console.log("Function called for:", inputId);
+        const words = ["Ace", "Act", "Adv", "Agt", "Aim", "Alt", "Api", "App", "Art", "Ask", "Ass", "Aud", "Avg", "Ban", "Bar", "Bid", "Bio", "Bot", "Buy", "Cad", "Cam", "Cap", "CEO", "CFO", "CIO", "Cmd", "Com", "Con", "Cop", "Cor", "CRM", "CTO", "Ctr", "Cur", "Cvt", "Dba", "Dec", "Def", "Dev", "Dir", "Doc", "Dos", "DRM", "Dsp", "Edu", "Eng", "Ent", "Est", "Exp", "Ext", "Faq", "Fdn", "Fin", "Fix", "Fld", "For", "Fst", "Ftr", "Fun", "Gal", "Gen", "Geo", "Gif", "Git", "Glo", "Gov", "Hcm", "Hlp", "Hms", "HRM", "Hse", "Ico", "Inc", "Ind", "Inf", "Inn", "Int", "Inv", "IOT", "IPR", "Iso", "ITs", "Job", "Key", "Kit", "Lab", "Law", "Led", "Lex", "Lgl", "Lms", "Log", "Ltd", "Mba", "Med", "Met", "Mfg", "Mgr", "Mis", "Mob", "Mod", "Mon", "Mot", "Mkt", "Mng", "Mnl", "Mrk", "Msg", "Mth", "Nav", "Net", "New", "Nft", "Nlp", "Ocr", "Oem", "Off", "Org", "Par", "Pas", "Pat", "Pdf", "Pic", "Pix", "Pln", "Pos", "Prd", "Pro", "Prt", "Pub", "Qlt", "Qms", "R&D", "Rcm", "Rec", "Ref", "Reg", "Rep", "Req", "Res", "Rev", "Rfp", "Rsa", "Saa", "Saa", "Sdk", "Seo", "Ser", "Sit", "Sme", "Soc", "Sof", "Spe", "Srv", "Ssl", "Ssw", "Stk", "Stn", "Stp", "Svc", "Sys", "Tac", "Tag", "Tap", "Tax", "Tcp", "Tek", "Tel", "Ter", "Tes", "Tgt", "Tls", "Top", "Trd", "Txt", "Uat", "Url", "UxD", "Vfx", "Vis", "Vpn", "Vrf", "Wbs", "Web", "Win", "Wit", "Wms", "Wok", "Www", "Xml", "Xls", "Yrs", "Zip"]; // Add more words if needed
+        const randomWord = words[Math.floor(Math.random() * words.length)];
+        const password = `2025@${randomWord}`;
+
+        document.getElementById(inputId).value = password;
+    }
+
+</script>
+
+
+
+
+{% if saved_message %}
+
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="liveToast" class="toast slide-in-right align-items-center text-bg-primary border-0" role="alert"
+        aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                {{saved_message}}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.onload = function () {
+        const toastLiveExample = document.getElementById('liveToast');
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+        toastBootstrap.show();
+    };
+</script>
+
+{% endif %}
+
+
+
+<style>
+    .slide-in-right {
+        transform: translateX(100%);
+        animation: slide-in 1s forwards;
+    }
+
+    @keyframes slide-in {
+        from {
+            transform: translateX(100%);
+        }
+
+        to {
+            transform: translateX(0);
+        }
+    }
+</style>
+
+
+
+
+
+
+
+
+
+<script>
+    var navLink = document.getElementById('Sub1');
+    navLink.classList.add('active');
+</script>
+{% endblock %}

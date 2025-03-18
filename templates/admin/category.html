@@ -1,0 +1,549 @@
+{% extends 'admin/admin_navbar.html' %}
+{% block content %}
+{% load static %}
+
+
+<div class="content">
+
+    <div class="pb-9">
+        <div class="row align-items-center justify-content-between g-3 mb-4">
+            <div class="col-12 col-md-auto">
+                <h2 class="mb-0">Manage Categories</h2>
+            </div>
+
+        </div>
+        <div class="row g-4 g-xl-6">
+
+            <style>
+                table .card {
+                    border: 1px solid;
+                    padding: 5px 15px !important;
+                    margin-top: 10px;
+                    margin-bottom: 10px;
+                    border-radius: 0px !important;
+                }
+            </style>
+
+            <div class="col-xl-7 col-xxl-8">
+                <div class="row gx-5">
+                    <div class="col-12">
+                        <div class="container mt-2">
+                            <table class="table table-bordered">
+                                 
+                                <tbody>
+                                    {% for category in categories %}
+
+
+
+                                    <div class="modal fade" id="tooltipModal_{{ category.id }}" tabindex="-1" aria-labelledby="tooltipModalLabel"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="tooltipModalLabel">Delete {{ category.category_name }} Category?</h5><button
+                                                        class="btn btn-close p-1" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h5>
+                                                        Are you sure you want to delete the category "{{ category.category_name }}"?
+                                                    </h5>
+                                                    <p class="mt-3">
+                                                        Note : If any files are associated with this category, they will be affected. The category will be removed from those files. 
+                                                    </p>
+                                                </div>
+                                                
+                                                <div class="modal-footer">
+                                                    <a href="{% url 'delete_category' category.id %}" class="btn btn-primary text-white" type="button">Okay</a>
+                                                    
+                                                    <button
+                                                        class="btn btn-outline-secondary" type="button" data-bs-dismiss="modal">Cancel</button></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+
+
+
+                                    {% if not category.parent_category %}
+                                    <tr>
+                                        <td style="padding-left: 15px;">
+                                            <div class="row">
+                                                <div class="col">
+
+                                                    <div class="card w-max-content d-flex">
+                                                        <span class="d-flex align-items-center">
+                                                            <span class="uil uil-arrow-right fs-2"></span>
+                                                            <b> {{ category.category_name }}</b>
+
+
+                                                            <div class="d-flex ms-5" style="border-left: 1px solid;">
+                                                                <button class="btn btn-link   text-danger" type="button" data-bs-toggle="modal" data-bs-target="#tooltipModal_{{ category.id }}">
+                                                                    
+                                                                    Delete</button>
+                                                              
+
+                                                            </div>
+
+                                                        </span>
+                                                    </div>
+
+
+                                                </div>
+
+                                            </div>
+                                            {% for child in category.children_categories.all %}
+                                            <div class="row">
+                                                <div class="col" style="margin-left: 39px; border-left: 1px dotted;">
+
+                                                    <div class="card w-max-content d-flex">
+                                                        <span class="d-flex align-items-center">
+
+                                                            <span class="uil uil-arrow-from-right fs-1 me-2"></span>
+                                                            {{ child.category_name }}
+
+                                                            <div class="d-flex ms-5" style="border-left: 1px solid;">
+                                                                <button class="btn btn-link   text-danger" type="button" data-bs-toggle="modal" data-bs-target="#tooltipModal_{{ child.id }}">
+                                                                    
+                                                                    Delete</button>
+                                                       
+
+                                                            </div>
+                                                        </span>
+                                                    </div>
+
+
+
+
+                                                    {% for sub_child in child.children_categories.all %}
+                                                    <div class="row" style="margin-left: 18px; border-left: 1px dotted;"">
+                                                        <div class=" col">
+                                                        <div class="card w-max-content d-flex">
+                                                            <span class="d-flex align-items-center">
+                                                                <span class="uil uil-arrow-from-right fs-1 me-2"></span>
+                                                                {{ sub_child.category_name }}
+
+                                                                <div class="d-flex ms-5"
+                                                                    style="border-left: 1px solid;">
+                                                                    <button class="btn btn-link   text-danger" type="button" data-bs-toggle="modal" data-bs-target="#tooltipModal_{{ sub_child.id }}">
+                                                                        
+                                                                        Delete</button>
+                                                                  
+                                                                </div>
+                                                            </span>
+                                                        </div>
+
+
+                                                        {% for sub_parent_child in sub_child.children_categories.all%}
+                                                        <div class="row"
+                                                            style="margin-left: 18px; border-left: 1px dotted;">
+                                                            <div class="col">
+                                                                <div class="card w-max-content d-flex">
+                                                                    <span class="d-flex align-items-center">
+                                                                        <span
+                                                                            class="uil uil-arrow-from-right fs-1 me-2"></span>
+                                                                        {{ sub_parent_child.category_name }}
+
+                                                                        <div class="d-flex ms-5"
+                                                                            style="border-left: 1px solid;">
+                                                                            <button class="btn btn-link   text-danger" type="button" data-bs-toggle="modal" data-bs-target="#tooltipModal_{{ sub_parent_child.id }}">
+                                                                                
+                                                                                Delete</button>
+                                                                            
+                                                                        </div>
+                                                                    </span>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                        </div>
+                        {% endfor %}
+                        </td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                        </tbody>
+
+
+
+
+
+
+                        </table>
+
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+
+
+
+
+        <div class="col-xl-5 col-xxl-4">
+            <div class="sticky-leads-sidebar">
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="mb-5">Create New Category/Sub Category</h5>
+                        <div class="row g-3">
+
+
+
+
+                            <form action="{% url 'save_category' %}" method="post" enctype="multipart/form-data"
+                                class="col-12">
+                                {% csrf_token %}
+
+                                <div class="mb-4">
+                                    <div class="d-flex flex-wrap justify-content-between mb-2">
+                                        <h6 class="mb-0 text-body-highlight me-2">Select Main Menu</h6>
+                                    </div>
+                                    <select class="form-select mb-3" aria-label="category" name="main_category"
+                                        id="main_category">
+                                        <option value="0">--- Select category ---</option>
+                                        {% for c in categories %}
+                                        {% if not c.parent_category %}
+                                        <option value="{{ c.id }}">{{ c.category_name }}</option>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="mb-4">
+                                    <h6 class="mb-0 text-body-highlight mb-2">Select Parent Category</h6>
+                                    <select class="form-select mb-3" aria-label="priority" name="parent_category"
+                                        id="parent_category">
+                                        <option value="0">Default</option>
+                                    </select>
+                                </div>
+
+
+
+                                <div class="mb-4">
+                                    <h6 class="mb-0 text-body-highlight mb-2">Select Sub Parent Category</h6>
+                                    <select class="form-select mb-3" aria-label="stage" name="sub_parent_category"
+                                        id="sub_parent_category">
+                                        <option value="0">Default</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-4">
+                                    <h6 class="mb-0 text-body-highlight mb-2">Name</h6>
+                                    <input type="text" name="category_name" required class="form-control"
+                                        placeholder="Enter category">
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <button class="btn btn-primary w-100" type="submit">Save</button>
+                                    </div>
+                                    <!-- <div class="col-6">
+                                        <button class="btn btn-secondary w-100" type="button">Reset</button>
+                                    </div> -->
+                                </div>
+                            </form>
+
+                            <div id="all_categories" style="display:none;">
+                                {% for c in categories %}
+                                {% if c.parent_category %}
+                                <input type="hidden" data-parent="{{ c.parent_category.id }}" value="{{ c.id }}"
+                                    data-name="{{ c.category_name }}">
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                            <div id="all_sub_categories" style="display:none;">
+                                {% for c in categories %}
+                                {% if c.parent_category %}
+                                <input type="hidden" data-sub-parent="{{ c.parent_category.id }}" value="{{ c.id }}"
+                                    data-name="{{ c.category_name }}">
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+
+                            <script>
+                                document.getElementById('main_category').addEventListener('change', function () {
+                                    var mainCategoryId = this.value;
+                                    var parentDropdown = document.getElementById('parent_category');
+                                    var subParentDropdown = document.getElementById('sub_parent_category');
+
+                                    // Clear existing options
+                                    parentDropdown.innerHTML = '<option value="0">Default</option>';
+                                    subParentDropdown.innerHTML = '<option value="0">Default</option>';
+
+                                    if (mainCategoryId !== '0') {
+                                        var allCategories = document.getElementById('all_categories').children;
+
+                                        for (var i = 0; i < allCategories.length; i++) {
+                                            var category = allCategories[i];
+                                            if (category.getAttribute('data-parent') === mainCategoryId) {
+                                                var option = document.createElement('option');
+                                                option.value = category.value;
+                                                option.text = category.getAttribute('data-name');
+                                                parentDropdown.appendChild(option);
+                                            }
+                                        }
+                                    }
+                                });
+
+                                document.getElementById('parent_category').addEventListener('change', function () {
+                                    var parentCategoryId = this.value;
+                                    var subParentDropdown = document.getElementById('sub_parent_category');
+
+                                    // Clear existing options
+                                    subParentDropdown.innerHTML = '<option value="0">Default</option>';
+
+                                    if (parentCategoryId !== '0') {
+                                        var allSubCategories = document.getElementById('all_sub_categories').children;
+
+                                        for (var i = 0; i < allSubCategories.length; i++) {
+                                            var category = allSubCategories[i];
+                                            if (category.getAttribute('data-sub-parent') === parentCategoryId) {
+                                                var option = document.createElement('option');
+                                                option.value = category.value;
+                                                option.text = category.getAttribute('data-name');
+                                                subParentDropdown.appendChild(option);
+                                            }
+                                        }
+                                    }
+                                });
+                            </script>
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- <div class="col-xl-5 col-xxl-4">
+                <div class="sticky-leads-sidebar">
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="mb-5">Create New Category/Sub Category</h5>
+                            <div class="row g-3">
+
+
+
+                                
+                                <form action="{% url 'save_category' %}" method="post" enctype="multipart/form-data" class="col-12">
+                                    {% csrf_token %}
+                                
+                                    <div class="mb-4">
+                                        <div class="d-flex flex-wrap justify-content-between mb-2">
+                                            <h6 class="mb-0 text-body-highlight me-2">Select Main Menu</h6>
+                                        </div>
+                                        <select class="form-select mb-3" aria-label="category" name="main_category" id="main_category">
+                                            <option value="0">--- Select category ---</option>
+                                            {% for c in categories %}
+                                                {% if not c.parent_category %}
+                                                    <option value="{{ c.id }}">{{ c.category_name }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <h6 class="mb-0 text-body-highlight mb-2">Select Parent Category</h6>
+                                        <select class="form-select mb-3" aria-label="priority" name="parent_category" id="parent_category">
+                                            <option value="0">Default</option>
+                                        </select>
+                                    </div>
+                                
+                                    <div class="mb-4">
+                                        <h6 class="mb-0 text-body-highlight mb-2">Select Sub Parent Category</h6>
+                                        <select class="form-select mb-3" aria-label="stage" name="sub_parent_category" id="sub_parent_category">
+                                            <option value="0">Default</option>
+                                        </select>
+                                    </div>
+                                
+                                    <div class="mb-4">
+                                        <h6 class="mb-0 text-body-highlight mb-2">Name</h6>
+                                        <input type="text" name="category_name" required class="form-control" placeholder="Enter category">
+                                    </div>
+                                
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <button class="btn btn-primary w-100" type="submit">Save</button>
+                                        </div>
+                                        <div class="col-6">
+                                            <button class="btn btn-secondary w-100" type="button">Reset</button>
+                                        </div>
+                                    </div>
+                                
+                                    <div id="all_categories" style="display:none;">
+                                        {% for c in categories %}
+                                            {% if c.parent_category and c.sub_parent_category == None %}
+                                                <input type="hidden" data-parent="{{ c.parent_category.id }}" value="{{ c.id }}" data-name="{{ c.category_name }}">
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    
+                                
+                                    <div id="all_sub_categories" style="display:none;">
+                                        {% for c in categories %}
+                                            {% if c.sub_parent_category %}
+                                                <input type="hidden" data-sub-parent="{{ c.sub_parent_category.id }}" value="{{ c.id }}" data-name="{{ c.category_name }}">
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </form>
+                                
+                                <script>
+                                    document.getElementById('main_category').addEventListener('change', function() {
+                                        var mainCategoryId = this.value;
+                                        var parentDropdown = document.getElementById('parent_category');
+                                        var subParentDropdown = document.getElementById('sub_parent_category');
+                                
+                                        // Clear existing options
+                                        parentDropdown.innerHTML = '<option value="0">Default</option>';
+                                        subParentDropdown.innerHTML = '<option value="0">Default</option>';
+                                
+                                        if (mainCategoryId !== '0') {
+                                            var allCategories = document.getElementById('all_categories').children;
+                                
+                                            for (var i = 0; i < allCategories.length; i++) {
+                                                var category = allCategories[i];
+                                                if (category.getAttribute('data-parent') === mainCategoryId) {
+                                                    var option = document.createElement('option');
+                                                    option.value = category.value;
+                                                    option.text = category.getAttribute('data-name');
+                                                    parentDropdown.appendChild(option);
+                                                }
+                                            }
+                                        }
+                                    });
+                                
+                                    document.getElementById('parent_category').addEventListener('change', function() {
+                                        var parentCategoryId = this.value;
+                                        var subParentDropdown = document.getElementById('sub_parent_category');
+                                
+                                        // Clear existing options
+                                        subParentDropdown.innerHTML = '<option value="0">Default</option>';
+                                
+                                        if (parentCategoryId !== '0') {
+                                            var allSubCategories = document.getElementById('all_sub_categories').children;
+                                
+                                            for (var i = 0; i < allSubCategories.length; i++) {
+                                                var category = allSubCategories[i];
+                                                if (category.getAttribute('data-sub-parent') === parentCategoryId) {
+                                                    var option = document.createElement('option');
+                                                    option.value = category.value;
+                                                    option.text = category.getAttribute('data-name');
+                                                    subParentDropdown.appendChild(option);
+                                                }
+                                            }
+                                        }
+                                    });
+                                </script>
+                                
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+    </div>
+</div>
+<footer class="footer position-absolute">
+    <div class="row g-0 justify-content-between align-items-center h-100">
+        <div class="col-12 col-sm-auto text-center">
+            <p class="mb-0 mt-2 mt-sm-0 text-body">Falcon iOS Application<span
+                    class="d-none d-sm-inline-block"></span><span class="d-none d-sm-inline-block mx-1">|</span><br
+                    class="d-sm-none" />2024 ~ <span id="year"></span><script>document.getElementById("year").textContent = new Date().getFullYear();</script> &copy; </p>
+        </div>
+        <div class="col-12 col-sm-auto text-center">
+            <p class="mb-0 text-body-tertiary text-opacity-85">v1</p>
+        </div>
+    </div>
+</footer>
+
+
+
+
+
+</div>
+
+
+
+
+{% if saved_message %}
+
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="liveToast" class="toast slide-in-right align-items-center text-bg-primary border-0" role="alert"
+        aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                {{saved_message}}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.onload = function () {
+        const toastLiveExample = document.getElementById('liveToast');
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+        toastBootstrap.show();
+    };
+</script>
+
+{% endif %}
+
+
+
+<style>
+    .slide-in-right {
+        transform: translateX(100%);
+        animation: slide-in 1s forwards;
+    }
+
+    @keyframes slide-in {
+        from {
+            transform: translateX(100%);
+        }
+
+        to {
+            transform: translateX(0);
+        }
+    }
+</style>
+
+
+
+
+
+
+
+
+
+<script>
+    var navLink = document.getElementById('nav3');
+    navLink.classList.add('active');
+</script>
+{% endblock %}

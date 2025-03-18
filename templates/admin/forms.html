@@ -1,0 +1,315 @@
+{% extends 'admin/admin_navbar.html' %}
+{% block content %}
+{% load static %}
+
+
+<div class="content">
+
+    <div class="mb-9">
+        <div id="projectSummary"
+            data-list='{"valueNames":["projectName","assignees","start","deadline","task","projectprogress","status","action"],"page":6,"pagination":true}'>
+            <div class="row mb-4 gx-6 gy-3 align-items-center">
+                <div class="col-auto">
+                    <h2 class="mb-0">Forms </h2>
+                </div>
+
+            </div>
+            
+             
+            
+            
+            <!--<div class="row mb-3">-->
+            <!--    <div class="col">-->
+            <!--        <div class="card h-100 hover-actions-trigger   badge-phoenix badge-phoenix-primary">-->
+            <!--            <div class="card-body pb-3 pt-3"> -->
+            <!--                <div class="d-flex align-items-center">-->
+            <!--                    <h4 class=" text-capitalize line-clamp-1 lh-sm flex-1 me-5 m-0">Daily Signature Forms</h4>-->
+            <!--                    <div class=" top-0 end-0  ">-->
+
+
+            <!--                        <a href="{% url 'dailyForm'  %}" class="btn btn-primary btn-icon flex-shrink-0" ><span class="fa-solid fa-chevron-right text-white"></span></a>-->
+  
+            <!--                    </div>-->
+            <!--                </div> -->
+            <!--            </div>-->
+            <!--        </div>-->
+            <!--    </div>-->
+            <!--</div>-->
+             
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-3 row-cols-xxl-4 g-3 mb-9">
+                
+                
+                
+                
+
+                <div class="col">
+                    <div class="card h-100 hover-actions-trigger">
+                        <div class="card-body"> 
+                            <div class="d-flex align-items-center">
+                                <h4 class="mb-2 line-clamp-1 lh-sm flex-1 me-5">Aircraft Search Checklist</h4>
+                                <div class="hover-actions top-0 end-0 mt-4 me-4">
+
+
+                                    <a href="{% url 'form'  %}?id=FAF01" class="btn btn-primary btn-icon flex-shrink-0" ><span class="fa-solid fa-chevron-right text-white"></span></a>
+  
+                                </div>
+                            </div>
+                            <span>Form ID :</span>
+                            <span class="badge badge-phoenix fs-10 badge-phoenix-success" id="formId">FAF01</span> 
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="col">
+                    <div class="card h-100 hover-actions-trigger">
+                        <div class="card-body"> 
+                            <div class="d-flex align-items-center">
+                                <h4 class="mb-2 line-clamp-1 lh-sm flex-1 me-5">Rotary Wing Journey Log</h4>
+                                <div class="hover-actions top-0 end-0 mt-4 me-4">
+                                    <a href="{% url 'form'  %}?id=FAF02" class="btn btn-primary btn-icon flex-shrink-0" ><span class="fa-solid fa-chevron-right text-white"></span></a>
+                                </div>
+                            </div>
+                            <span>Form ID :</span>
+                            <span class="badge badge-phoenix fs-10 badge-phoenix-success" id="formId">FAF02</span> 
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100 hover-actions-trigger">
+                        <div class="card-body"> 
+                            <div class="d-flex align-items-center">
+                                <h4 class="mb-2 line-clamp-1 lh-sm flex-1 me-5">Operational Flight Plan</h4>
+                                <div class="hover-actions top-0 end-0 mt-4 me-4">
+                                    <a href="{% url 'form'  %}?id=FAF03" class="btn btn-primary btn-icon flex-shrink-0" ><span class="fa-solid fa-chevron-right text-white"></span></a>
+                                </div>
+                            </div>
+                            <span>Form ID :</span>
+                            <span class="badge badge-phoenix fs-10 badge-phoenix-success" id="formId">FAF03</span> 
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100 hover-actions-trigger">
+                        <div class="card-body"> 
+                            <div class="d-flex align-items-center">
+                                <h4 class="mb-2 line-clamp-1 lh-sm flex-1 me-5">Commercial Flight Record</h4>
+                                <div class="hover-actions top-0 end-0 mt-4 me-4">
+                                    <a href="{% url 'form'  %}?id=FAF04" class="btn btn-primary btn-icon flex-shrink-0" ><span class="fa-solid fa-chevron-right text-white"></span></a>
+                                </div>
+                            </div>
+                            <span>Form ID :</span>
+                            <span class="badge badge-phoenix fs-10 badge-phoenix-success" id="formId">FAF04</span> 
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100 hover-actions-trigger">
+                        <div class="card-body"> 
+                            <div class="d-flex align-items-center">
+                                <h4 class="mb-2 line-clamp-1 lh-sm flex-1 me-5">Commanders Discretoin Report</h4>
+                                <div class="hover-actions top-0 end-0 mt-4 me-4">
+                                    <a href="{% url 'form'  %}?id=FAF05" class="btn btn-primary btn-icon flex-shrink-0" ><span class="fa-solid fa-chevron-right text-white"></span></a>
+                                </div>
+                            </div>
+                            <span>Form ID :</span>
+                            <span class="badge badge-phoenix fs-10 badge-phoenix-success" id="formId">FAF05</span> 
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col">
+                    <div class="card h-100 hover-actions-trigger">
+                        <div class="card-body"> 
+                            <div class="d-flex align-items-center">
+                                <h4 class="mb-2 line-clamp-1 lh-sm flex-1 me-5">Rotary Wing Flight Plan Envelope</h4>
+                                <div class="hover-actions top-0 end-0 mt-4 me-4">
+                                    <a href="{% url 'form'  %}?id=FAF06" class="btn btn-primary btn-icon flex-shrink-0" ><span class="fa-solid fa-chevron-right text-white"></span></a>
+                                </div>
+                            </div>
+                            <span>Form ID :</span>
+                            <span class="badge badge-phoenix fs-10 badge-phoenix-success" id="formId">FAF06</span> 
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
+            <div class="modal modal-sm fade" id="formDateactionModal" tabindex="-1" aria-labelledby="formDateactionModal"
+                aria-hidden="true">
+            
+            
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="row g-5"> 
+                                <div class="col">
+                                    <div class="flatpickr-input-container flatpickr-input-sm w-100">
+                                        <input class="form-control form-control-sm ps-6 datetimepicker" id="datepicker" type="text"
+                                            data-options='{"dateFormat":"M j, Y","disableMobile":true}' />
+                                        <span class="uil uil-calendar-alt flatpickr-icon text-body-tertiary mt-1"></span>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <a id="goLink" href="#" class="btn btn-primary btn-sm text-white" type="button">Go</a>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+        </div>
+
+
+
+
+
+
+<script>
+    // Function to handle button click, show form modal, and set the form ID and date dynamically
+document.querySelectorAll('.btn-icon').forEach(button => {
+    button.addEventListener('click', function (event) { 
+        const formCard = event.target.closest('.card-body');
+        const formId = formCard.querySelector('#formId').textContent;
+ 
+        const today = new Date();
+        const currentDate = today.toLocaleDateString('en-GB').replace(/\//g, '-');
+ 
+        const datePicker = document.querySelector('#datepicker');
+        datePicker.value = today.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+ 
+        const goButton = document.querySelector('#formDateactionModal .btn-primary');
+        goButton.href = `form?id=${formId}&date=${currentDate}`;
+ 
+    });
+});
+
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get the current date
+        const today = new Date();
+        
+        // Initialize Flatpickr with the default date
+        flatpickr("#datepicker", {
+            dateFormat: "M j, Y",
+            disableMobile: true,
+            defaultDate: today // Automatically sets the current date
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    // Get the datepicker input field
+    const datePicker = document.getElementById('datepicker');
+
+    // Get the current date
+    const today = new Date();
+
+    // Format the date as "M d, Y" (e.g., "Oct 14, 2024")
+    const formattedDate = today.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    });
+
+    // Set the value of the datepicker to the current date
+    datePicker.value = formattedDate;
+});
+
+</script>
+
+
+
+
+
+
+
+
+        <footer class="footer position-absolute">
+            <div class="row g-0 justify-content-between align-items-center h-100">
+                <div class="col-12 col-sm-auto text-center">
+                    <p class="mb-0 mt-2 mt-sm-0 text-body">Falcon iOS Application<span
+                            class="d-none d-sm-inline-block"></span><span
+                            class="d-none d-sm-inline-block mx-1">|</span><br class="d-sm-none" />2024 ~ <span id="year"></span><script>document.getElementById("year").textContent = new Date().getFullYear();</script> &copy;</p>
+                </div>
+                <div class="col-12 col-sm-auto text-center">
+                    <p class="mb-0 text-body-tertiary text-opacity-85">v1</p>
+                </div>
+            </div>
+        </footer>
+
+
+    </div>
+
+
+
+    {% if saved_message %}
+
+
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="liveToast" class="toast slide-in-right align-items-center text-bg-primary border-0" role="alert"
+            aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    {{ saved_message }}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const toastLiveExample = document.getElementById('liveToast');
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+            toastBootstrap.show();
+        });
+    </script>
+
+    {% endif %}
+
+
+    <style>
+        .slide-in-right {
+            transform: translateX(100%);
+            animation: slide-in 1s forwards;
+        }
+
+        @keyframes slide-in {
+            from {
+                transform: translateX(100%);
+            }
+
+            to {
+                transform: translateX(0);
+            }
+        }
+    </style>
+
+
+
+
+
+
+
+
+
+    <script>
+        var navLink = document.getElementById('nav20');
+        navLink.classList.add('active');
+    </script>
+    {% endblock %}

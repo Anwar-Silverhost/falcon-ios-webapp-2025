@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Falcon</title>
+    <link rel="shortcut icon" href="{% static 'logo/favicon.svg' %}" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'logo/favicon.svg' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'logo/favicon.svg' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'logo/favicon.svg' %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'logo/favicon.svg' %}">
+    <meta name="msapplication-TileImage" content="{% static 'logo/favicon.svg' %}">
+    <meta name="theme-color" content="#ffffff">
+    <script src="{% static 'js/simplebar.min.js' %}"></script>
+    <script src="{% static 'js/config.js' %}"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&amp;display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/choices.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/flatpickr.min.css' %}">
+
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+    <link rel="stylesheet" href="{% static 'css/line.css' %}">
+    <link rel="stylesheet" href="{% static 'css/simplebar.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/theme-rtl.min.css' %}" id="style-rtl">
+    <link rel="stylesheet" href="{% static 'css/theme.min.css' %}" id="style-default">
+    <link rel="stylesheet" href="{% static 'css/user-rtl.min.css' %}" id="user-style-rtl">
+    <link rel="stylesheet" href="{% static 'css/user.min.css' %}" id="user-style-default">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <script>
+        var phoenixIsRTL = window.config.config.phoenixIsRTL;
+        if (phoenixIsRTL) {
+            var linkDefault = document.getElementById('style-default');
+            var userLinkDefault = document.getElementById('user-style-default');
+            linkDefault.setAttribute('disabled', true);
+            userLinkDefault.setAttribute('disabled', true);
+            document.querySelector('html').setAttribute('dir', 'rtl');
+        } else {
+            var linkRTL = document.getElementById('style-rtl');
+            var userLinkRTL = document.getElementById('user-style-rtl');
+            linkRTL.setAttribute('disabled', true);
+            userLinkRTL.setAttribute('disabled', true);
+        }
+    </script>
+</head>
+
+<body> 
+    <main class="main" id="top">
+        <div class="px-3">
+            <div class="row min-vh-100 flex-center p-5">
+                <div class="col-12 col-xl-10 col-xxl-8">
+                    <div class="row justify-content-center align-items-center g-5">
+                        <div class="col-12 col-lg-6 text-center order-lg-1"><img class="img-fluid w-lg-100 d-dark-none"
+                                src="{% static 'images/404_Error.png' %}" alt="" width="500" /><img
+                                class="img-fluid w-md-50 w-lg-100 d-light-none"
+                                src="{% static 'images/404_Error.png' %}" alt="" width="540" /></div>
+                        <div class="col-12 col-lg-6 text-center text-lg-start">
+
+                            <h2 class="text-body-secondary fw-bolder mb-3">Something Wrong !!</h2>
+                            <p class="text-body mb-5">
+                                The page you are looking for does not exist.
+
+
+                            </p><a class="btn btn-lg btn-primary text-white" href="{% url 'dashboard' %}">Go Home</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/anchor.min.js' %}"></script>
+    <script src="{% static 'js/is.min.js' %}"></script>
+    <script src="{% static 'js/all.min.js' %}"></script>
+    <script src="{% static 'js/lodash.min.js' %}"></script>
+    <script src="{% static 'js/list.min.js' %}"></script>
+    <script src="{% static 'js/feather.min.js' %}"></script>
+    <script src="{% static 'js/dayjs.min.js' %}"></script>
+    <script src="{% static 'js/leaflet.js' %}"></script>
+    <script src="{% static 'js/leaflet.markercluster.js' %}"></script>
+    <script src="{% static 'js/leaflet-tilelayer-colorfilter.min.js' %}"></script>
+    <script src="{% static 'js/phoenix.js' %}"></script>
+    <script src="{% static 'js/crm-dashboard.js' %}"></script>
+    <script src="{% static 'js/imagesloaded.pkgd.min.js' %}"></script>
+    <script src="{% static 'js/echarts.min.js' %}"></script>
+    <script src="{% static 'js/ecommerce-dashboard.js' %}"></script>
+    <script src="{% static 'js/choices.min.js' %}"></script>
+    <script src="{% static 'js/Sortable.min.js' %}"></script>
+    <script src="{% static 'js/flatpickr.min.js' %}"></script>
+
+</body>
+
+</html>

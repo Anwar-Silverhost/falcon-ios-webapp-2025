@@ -1,0 +1,180 @@
+{% extends 'admin/admin_navbar.html' %}
+{% block content %}
+{% load static %}
+<style>
+    .form-icon-container .form-icon-input,
+    .form-icon-container .form-icon-label {
+        padding-left: 1rem !important;
+    }
+
+    .form-icon-container .form-icon-eye {
+        position: absolute;
+        top: 10px !important;
+        right: 1rem !important;
+        font-size: 22px;
+    }
+</style>
+
+ 
+<div class="content">
+    <h2 class="mb-4">Update Password</h2>
+    <div class="row">
+        <div class="col-xl-12">
+            <form class="row g-3 mb-6" action="{% url 'admin_update_save' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <!-- <div class="col-md-12">
+                    <label for="first_name" class="form-label">Name</label>
+                    <input type="text" class="form-control form-control-lg" id="first_name" name="name" value="{{ a.first_name }}">
+                </div>
+
+                <div class="col-md-12">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="text" class="form-control form-control-lg" id="email" name="email" value="{{ a.email }}">
+                </div>
+
+                <div class="col-md-12">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control form-control-lg" id="username" name="username" value="{{ a.username }}">
+                </div> -->
+
+                <div class="col-lg-12">
+                    <label for="cpassword" class="form-label">Current Password</label>
+                    <div class="form-icon-container" data-password="data-password">
+                        <input class="form-control form-control-lg form-icon-input" required name="cpassword" id="passwordx" type="password" />
+                        <span class="uil uil-eye form-icon-eye" id="togglePasswordx"></span>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <label for="npassword" class="form-label">New Password</label>
+                    <div class="form-icon-container" data-password="data-password">
+                        <input class="form-control form-control-lg form-icon-input" required name="npassword" id="password" type="password" />
+                        <span class="uil uil-eye form-icon-eye" id="togglePassword"></span>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <label for="confirm_password" class="form-label">Confirm Password</label>
+                    <div class="form-icon-container" data-password="data-password">
+                        <input class="form-control form-control-lg form-icon-input" required name="confirm_password" id="password2" type="password" />
+                        <span class="uil uil-eye form-icon-eye" id="togglePassword2"></span>
+                    </div>
+                </div>
+
+                <div class="col-12 gy-6">
+                    <div class="row g-3 justify-content-end">
+                        <div class="col-auto"><a href="{% url 'dashboard' %}" class="btn btn-phoenix-primary px-5">Cancel</a></div>
+                        <div class="col-auto"><button class="btn btn-primary px-5 px-sm-15" type="submit">Update Password</button></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+ 
+
+    <footer class="footer position-absolute">
+        <div class="row g-0 justify-content-between align-items-center h-100">
+            <div class="col-12 col-sm-auto text-center">
+                <p class="mb-0 mt-2 mt-sm-0 text-body">Falcon iOS Application<span
+                        class="d-none d-sm-inline-block"></span><span class="d-none d-sm-inline-block mx-1">|</span><br
+                        class="d-sm-none" />2024 ~ <span id="year"></span><script>document.getElementById("year").textContent = new Date().getFullYear();</script> &copy; </p>
+            </div>
+            <div class="col-12 col-sm-auto text-center">
+                <p class="mb-0 text-body-tertiary text-opacity-85">v1</p>
+            </div>
+        </div>
+    </footer>
+</div>
+
+ 
+
+
+{% if saved_message %}
+
+
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="liveToast" class="toast slide-in-right align-items-center text-bg-success border-0" role="alert"
+        aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                {{saved_message}}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    window.onload = function () {
+        const toastLiveExample = document.getElementById('liveToast');
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+        toastBootstrap.show();
+    };
+</script>
+
+{% endif %}
+
+
+
+<style>
+    .slide-in-right {
+        transform: translateX(100%);
+        animation: slide-in 1s forwards;
+    }
+
+    @keyframes slide-in {
+        from {
+            transform: translateX(100%);
+        }
+
+        to {
+            transform: translateX(0);
+        }
+    }
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    document.getElementById('togglePassword').addEventListener('click', function () {
+        const passwordInput = document.getElementById('password');
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        this.classList.toggle('uil-eye-slash'); // Toggle icon
+    });
+    document.getElementById('togglePassword2').addEventListener('click', function () {
+        const passwordInput2 = document.getElementById('password2');
+        const type = passwordInput2.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput2.setAttribute('type', type);
+        this.classList.toggle('uil-eye-slash'); // Toggle icon
+    });
+
+    document.getElementById('togglePasswordx').addEventListener('click', function () {
+        const passwordInputx = document.getElementById('passwordx');
+        const type = passwordInputx.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInputx.setAttribute('type', type);
+        this.classList.toggle('uil-eye-slash'); // Toggle icon
+    });
+</script>
+
+
+
+
+<script>
+    var navLink = document.getElementById('nav10a');
+    navLink.classList.add('active');
+</script>
+{% endblock %}

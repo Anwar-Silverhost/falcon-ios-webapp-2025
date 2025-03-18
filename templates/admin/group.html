@@ -1,0 +1,275 @@
+{% extends 'admin/admin_navbar.html' %}
+{% block content %}
+{% load static %}
+
+
+<div class="content">
+    <div class="row">
+        <div class="col-md-9">
+            <div class=" ">
+                <div class="card-body">
+                    <div class="mx-n4 px-4  bg-body-emphasis">
+                        <div>
+                            <div class="row align-items-end justify-content-between ">
+                                <div class="col-auto">
+                                    <h2 class="mb-3">Aircraft Type</h2>
+                                </div>
+                                <div class="col-12 col-md-auto">
+
+                                </div>
+                            </div>
+
+
+
+                            <div class="row gx-5">
+                                <div class="col-12">
+
+                                    <div class="container mt-2">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Aircraft Type | Registration</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for group in groups %}
+                                                <tr>
+                                                    <td style="padding-left: 15px;">
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <span class="uil uil-arrow-right fs-1"></span>
+                                                                {{ group.group_name }}
+                                                            </div>
+                                                            <div class="col-auto me-5">
+
+                                                                <div class="btn-reveal-trigger position-static">
+                                                                    <button
+                                                                        class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10"
+                                                                        type="button" data-bs-toggle="dropdown"
+                                                                        data-boundary="window" aria-haspopup="true"
+                                                                        aria-expanded="false"
+                                                                        data-bs-reference="parent">
+                                                                        <span class="fas fa-trash"
+                                                                            style="color: #AA182C;"></span>
+                                                                    </button>
+
+                                                                    {% if not group.has_pdf %}
+                                                                    <div class="dropdown-menu dropdown-menu-end py-2">
+                                                                        <a class="dropdown-item readonly disabled"
+                                                                            href="#!">Are you sure to delete <b>{{ group.group_name }}</b> aircraft
+                                                                            type?</a>
+                                                                        <div class="dropdown-divider"></div>
+                                                                        <div class="row ps-3 pe-3">
+                                                                            <div class="col-6"><a
+                                                                                    class="dropdown-item text-center">No</a>
+                                                                            </div>
+                                                                            <div class="col-6"><a
+                                                                                    class="dropdown-item text-danger text-center"
+                                                                                    href="{% url 'delete_group' group.id %}">Yes</a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    {% else %}
+                                                                    <div class="dropdown-menu dropdown-menu-end py-2">
+                                                                        <a class="dropdown-item readonly disabled"
+                                                                            href=""> This aircraft type contains a PDF
+                                                                            file. Please delete the file first.</a>
+                                                                    </div>
+                                                                    {% endif %}
+
+
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+                                                {% for subgroup in group.child_groups.all %}
+                                                <tr>
+                                                    <td style="padding-left: 40px;">
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <span class="uil uil-arrow-from-right fs-1 me-2"></span>
+                                                                {{ subgroup.group_name }}
+                                                            </div>
+                                                            <div class="col-auto me-5">
+
+                                                                <div class="btn-reveal-trigger position-static">
+                                                                    <button
+                                                                        class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10"
+                                                                        type="button" data-bs-toggle="dropdown"
+                                                                        data-boundary="window" aria-haspopup="true"
+                                                                        aria-expanded="false"
+                                                                        data-bs-reference="parent">
+                                                                        <span class="fas fa-trash"
+                                                                            style="color: #AA182C;"></span>
+                                                                    </button>
+
+                                                                    {% if not subgroup.has_pdf %}
+                                                                    <div class="dropdown-menu dropdown-menu-end py-2">
+                                                                        <a class="dropdown-item readonly disabled"
+                                                                            href="#!">Are you sure you want to delete
+                                                                            the <b>{{ subgroup.group_name }}</b>
+                                                                            parent-aircraft type?</a>
+                                                                        <div class="dropdown-divider"></div>
+                                                                        <div class="row ps-3 pe-3">
+                                                                            <div class="col-6"><a
+                                                                                    class="dropdown-item text-center">No</a>
+                                                                            </div>
+                                                                            <div class="col-6"><a
+                                                                                    class="dropdown-item text-danger text-center"
+                                                                                    href="{% url 'delete_group' subgroup.id %}">Yes</a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    {% else %}
+                                                                    <div class="dropdown-menu dropdown-menu-end py-2">
+                                                                        <a class="dropdown-item readonly disabled"
+                                                                            href=""> This parent aircraft type contains
+                                                                            a PDF file. Please delete the file
+                                                                            first.</a>
+                                                                    </div>
+                                                                    {% endif %}
+
+
+
+
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                                {% endfor %}
+                                            </tbody>
+
+
+
+
+                                        </table>
+                                    </div>
+
+
+
+
+                                </div>
+                            </div>
+
+
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Add Aircraft Type</h4>
+
+                    <form action="{% url 'save_group' %}" enctype="multipart/form-data" method="post">
+                        {% csrf_token %}
+                        <div class="form-group mb-3">
+                            <input type="text" required class="form-control" id="designation" name="group" autocomplete="off"
+                                placeholder="Enter Aircraft Type">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="" class="form-label">Parent Aircraft Type</label>
+                            <select class="form-select" id="parent_group" name="parent_group">
+                                <option value="">Select Aircraft Type</option>
+                                {% for group in groups %}
+                                <option value="{{ group.id }}">{{ group.group_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button class="btn btn-phoenix-primary w-100" type="submit">Save</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <footer class="footer position-absolute">
+        <div class="row g-0 justify-content-between align-items-center h-100">
+            <div class="col-12 col-sm-auto text-center">
+                <p class="mb-0 mt-2 mt-sm-0 text-body">Falcon iOS Application<span
+                        class="d-none d-sm-inline-block"></span><span class="d-none d-sm-inline-block mx-1">|</span><br
+                        class="d-sm-none" />2024 ~ <span id="year"></span><script>document.getElementById("year").textContent = new Date().getFullYear();</script> &copy;</p>
+            </div>
+            <div class="col-12 col-sm-auto text-center">
+                <p class="mb-0 text-body-tertiary text-opacity-85">v1</p>
+            </div>
+        </div>
+    </footer>
+
+
+</div>
+
+
+
+{% if saved_message %}
+
+
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="liveToast" class="toast slide-in-right align-items-center text-bg-primary border-0" role="alert"
+        aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                {{ saved_message }}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const toastLiveExample = document.getElementById('liveToast');
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+        toastBootstrap.show();
+    });
+</script>
+
+{% endif %}
+
+
+<style>
+    .slide-in-right {
+        transform: translateX(100%);
+        animation: slide-in 1s forwards;
+    }
+
+    @keyframes slide-in {
+        from {
+            transform: translateX(100%);
+        }
+
+        to {
+            transform: translateX(0);
+        }
+    }
+</style>
+
+
+
+
+
+
+
+
+
+<script>
+    var navLink = document.getElementById('nav5');
+    navLink.classList.add('active');
+</script>
+{% endblock %}

@@ -1,0 +1,682 @@
+{% extends 'admin/admin_navbar.html' %}
+{% block content %}
+{% load static %}
+
+<style>
+    div#liveToast {
+    background-color: white !important;
+    color: black !important;
+    border-left: 4px solid #AA182C !important;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+}
+ 
+  .form-icon-container .form-icon-input,
+  .form-icon-container .form-icon-label {
+    padding-left: 1rem !important;
+  }
+
+  .form-icon-container .form-icon-eye {
+    position: absolute;
+    top: 10px !important;
+    right: 1rem !important;
+    font-size: 22px;
+  }
+ 
+</style>
+
+
+<div class="content">
+    {% if user %}
+
+
+    <div class="pb-9">
+        <div class="row">
+            <div class="col-12">
+                <div class="row align-items-center justify-content-between g-3 mb-3">
+                    <div class="col-12 col-md-auto">
+                        <h2 class="mb-0">User Details</h2>
+                    </div>
+                    <div class="col-12 col-md-auto">
+                        <div class="d-flex">
+                            <div class="flex-1 d-md-none"><button
+                                    class="btn px-3 btn-phoenix-secondary text-body-tertiary me-2"
+                                    data-phoenix-toggle="offcanvas" data-phoenix-target="#productFilterColumn"><span
+                                        class="fa-solid fa-bars"></span></button></div>
+                                        
+                                        
+                                        
+                                    <button class="btn btn-phoenix-success me-2" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal1"><span class="fa-solid fa-rotate-right me-2"></span>Change Status</button>
+                                    <div class="modal fade" id="exampleModal1" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Change Status?</h5><button class="btn btn-close p-1" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p class="text-body-tertiary lh-lg mb-0">
+                                                Are you sure you want to change the status of this user? 
+                                            </p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a href="{% url 'statusUpdate' user.id 'sts' %}" class="btn btn-primary text-white" type="button">Yes</a>
+                                            <button class="btn btn-outline-secondary" type="button" data-bs-dismiss="modal">No</button></div>
+                                        </div>
+                                    </div>
+                                    </div>
+                             
+                                    
+                                    <button class="btn btn-primary me-2" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="fa-solid fa-trash me-2"></span> Delete user</button>
+                                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Delete?</h5><button class="btn btn-close p-1" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p class="text-body-tertiary lh-lg mb-0">
+                                               Are you sure you want to delete this user?
+                                            </p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a href="{% url 'statusUpdate' user.id 'del' %}" class="btn btn-primary text-white" type="button">Delete</a>
+                                            <button class="btn btn-outline-secondary" type="button" data-bs-dismiss="modal">Cancel</button></div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    
+                                <div class="modal fade" id="exampleModal_Signature" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Signature</h5>
+                                                <button class="btn btn-close p-1" type="button"
+                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body text-center">
+                                                <img class="img-fluid mb-1 rounded-3" src="{{ user.user_sign.url }}" alt="">
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    <!-- <button
+                                class="btn btn-phoenix-secondary px-3 px-sm-5 me-2"><span
+                                    class="fa-solid fa-thumbtack me-sm-2"></span><span
+                                    class="d-none d-sm-inline">Shortlist</span></button> -->
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row g-0 g-md-4 g-xl-6">
+            <div class="col-md-5 col-lg-5 col-xl-4">
+                <div class="sticky-leads-sidebar">
+                    <div class="lead-details-offcanvas bg-body scrollbar phoenix-offcanvas phoenix-offcanvas-fixed"
+                        id="productFilterColumn">
+                        <div class="d-flex justify-content-between align-items-center mb-2 d-md-none">
+                            <h3 class="mb-0">Lead Details</h3><button class="btn p-0"
+                                data-phoenix-dismiss="offcanvas"><span class="uil uil-times fs-7"></span></button>
+                        </div>
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="row align-items-center g-3 text-center text-xxl-start">
+                                    <div class="col-12 col-xxl-auto">
+                                        <div class="avatar avatar-4xl"> 
+                                            {% if not user.profile_pic %}
+                                                <div class="avatar-name rounded-circle">
+                                                    <span class="text-uppercase">{{ user.firstname|slice:":1" }}</span>
+                                                </div>
+                                            {% else %}
+                                                <img class="rounded-circle" src="{{ user.profile_pic.url }}" alt="">
+                                            {% endif %} 
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-auto flex-1">
+                                        <h3 class="fw-bolder mb-2 ">{{user.firstname}}  {{user.lastname}}</h3>
+
+                                        <!-- <p class="mb-0">Chief tech officer,</p>
+                                        <a class="fw-bold" href="#!">Blue  Beetles</a> -->
+
+                                        <a class="fw-bold" href="#!">{{user.group_is}}</a> 
+                                        <p class="mb-0">{{user.designation}}</p>  
+                                        {% if user.user_status == '1' %}
+                                            <span class="badge badge-phoenix badge-phoenix-success">Active</span>
+                                            {% elif user.user_status == '0' %}
+                                                <span class="badge badge-phoenix badge-phoenix-danger">Inactive</span>
+                                            {% else %}
+                                            <span class="badge badge-phoenix badge-phoenix-warning">{{user.user_status}}</span>
+                                        {% endif %}
+
+
+
+
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div>
+                                    <div class="d-flex align-items-center">
+                                        <span class="me-2 uil uil-align-left"></span>
+                                        <h5 class="text-body-highlight">Aircraft type</h5>
+                                    </div>
+                                    <p>
+                                        {% if user.groups.all %}
+                                            {% for group in user.groups.all %}
+                                                {{ group.group_name }}{% if not forloop.last %}, {% endif %}
+                                            {% endfor %}
+                                        {% else %}
+                                            No groups assigned.
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+
+
+
+
+                        <div class="card mb-3">
+                            <div class="card-body"> 
+                                <div class="mb-4">
+                                    <div class="d-flex align-items-center mb-1"><span class="me-2 uil uil-user">
+                                        </span>
+                                        <h5 class="text-body-highlight mb-0">Username</h5>
+                                    </div>
+                                    <p>{{user.username}}</p>
+                                </div>
+
+                                <div>
+                                    <div class="d-flex align-items-center mb-1"><span class="me-2 uil uil-lock">
+                                        </span>
+                                        <h5 class="text-body-highlight mb-0">Password</h5>
+                                    </div> 
+                                    <div class="row">
+                                        <div class="col">
+                                            <p id="passwordText" class="password-text">*****</p>
+                                        </div>
+                                        <div class="col-auto">
+                                            <span id="togglePassword" class="badge badge-phoenix badge-phoenix-primary uil uil-eye cursor-pointer">Show</span>
+                                            <span id="copyButton" class="badge badge-phoenix badge-phoenix-warning">Copy</span>
+                                        </div>
+                                    </div> 
+                                </div> 
+ 
+                            </div>
+                        </div>
+
+
+
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                
+                                <div class="mb-4">
+                                    <div class="d-flex align-items-center mb-1"><span class="me-2 uil uil-envelope-alt">
+                                        </span>
+                                        <h5 class="text-body-highlight mb-0">Email</h5>
+                                    </div><a href="mailto:{{user.email}}">{{user.email}}</a>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="d-flex align-items-center mb-1"><span class="me-2 uil uil-phone">
+                                        </span>
+                                        <h5 class="text-body-highlight mb-0">Phone</h5>
+                                    </div><a href="tel:{{user.phone}}">{{user.phone}}</a>
+                                </div>
+                                 <div class="mb-4">
+                                    <div class="d-flex align-items-center mb-1"><span class="me-2 uil uil-weight">
+                                        </span>
+                                        <h5 class="text-body-highlight mb-0">Weight</h5>
+                                    </div> {{user.weight}} Kg
+                                </div>
+                                <div class="mb-4">
+                                    <div class="d-flex align-items-center mb-1"><span class="me-2 uil uil-user-check"></span>
+                                        <h5 class="text-body-highlight mb-0">Gender</h5>
+                                    </div> <p class="mb-0 text-body-secondary">{{user.gender}}</p>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="d-flex align-items-center mb-1"><span
+                                            class="me-2 uil uil-calendar-alt"></span>
+                                        <h5 class="text-body-highlight mb-0">Date of birth</h5>
+                                    </div>
+                                    <p class="mb-0 text-body-secondary">{{user.dob}}</p>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="d-flex align-items-center mb-1"><span
+                                            class="me-2 uil uil-building"></span>
+                                        <h5 class="text-body-highlight mb-0">Location</h5>
+                                    </div>
+                                    <p class="mb-0 text-body-secondary">{{user.location}}</p>
+                                </div>  
+                                <div class="mb-4">
+                                    <div class="d-flex align-items-center mb-1"><span class="me-2 uil uil-calender"></span>
+                                        <h5 class="text-body-highlight mb-0">Created</h5>
+                                    </div>
+                                    <p class="mb-0 text-body-secondary">{{user.created_at}}</p>
+                                </div>
+                                <div>
+                                    <div class="d-flex align-items-center mb-1"><span class="me-2 uil uil-pen"></span>
+                                        <h5 class="text-body-highlight mb-0">Signature</h5>
+                                    </div>
+                                    <p class="mb-0 text-body-secondary mb-3">
+                                        <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal"
+                                            data-bs-target="#exampleModal_Signature">
+                                            <i class="ul uil-eye"></i>
+                                        </button>
+                                    
+                                    </p>
+                                </div>
+                                <div>
+                                    <div class="d-flex align-items-center mb-1"><span class="me-2 uil uil-clock"></span>
+                                        <h5 class="text-body-highlight mb-0">Last connected</h5>
+                                    </div>
+                                    <p class="mb-0 text-body-secondary">{{user.last_logined | default:"-"}}</p>
+                                </div>
+                            </div>
+                        </div>
+                         
+                    </div>
+                    <div class="phoenix-offcanvas-backdrop d-lg-none top-0"
+                        data-phoenix-backdrop="data-phoenix-backdrop"></div>
+                </div>
+            </div>
+            <div class="col-md-7 col-lg-7 col-xl-8">
+                <div class="lead-details-container">
+                    <nav class="navbar pb-4 px-0 sticky-top bg-body nav-underline-scrollspy" id="navbar-deals-detail">
+                        <ul class="nav nav-underline fs-9">
+                            <li class="nav-item"><a class="nav-link me-2" href="#scrollspyTask">Update Details</a></li>
+                            <li class="nav-item"><a class="nav-link me-2" href="#scrollspyDeals">Update Password</a></li>
+                            <li class="nav-item"><a class="nav-link me-2" href="#scrollspyEmails">Update Aircraft Type</a></li>
+                           <li class="nav-item"><a class="nav-link" href="#scrollspyAttachments">Update Signature </a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <div class="scrollspy-example rounded-2" data-bs-spy="scroll" data-bs-offset="0"
+                        data-bs-target="#navbar-deals-detail" data-bs-root-margin="0px 0px -40%"
+                        data-bs-smooth-scroll="true" tabindex="0">
+                        <div class="mb-8">
+                            <h2 class=" " id="scrollspyTask"> </h2>
+                        
+                            <div class="card">
+                                <div class="card-body">
+                                    <h3 class="mb-5">Update Details</h3>
+                                    <div class="row g-3">
+
+
+
+                                        <form class="col-12" method="post" enctype="multipart/form-data" action="{% url 'update_user' user.id %}" id="updateDetails">
+                                            {% csrf_token %}
+
+
+
+                                            <div class="mb-4">
+                                                <div class="d-flex flex-wrap justify-content-between mb-2">
+                                                    <h5 class="mb-2 text-body-highlight me-2">First name</h5>
+                                            
+                                                    <input class="form-control form-control-lg" name="firstname" type="text" placeholder="Enter First name" value="{{user.firstname}}">
+                                                </div> 
+                                            </div>
+                                            <div class="mb-4">
+                                                <div class="d-flex flex-wrap justify-content-between mb-2">
+                                                    <h5 class="mb-2 text-body-highlight me-2">Last name</h5> 
+                                                    <input class="form-control form-control-lg" name="lastname" type="text" placeholder="Enter Last name" value="{{user.lastname}}"> 
+                                                </div> 
+                                            </div>
+
+                                            <div class="mb-4">
+                                                <div class="d-flex flex-wrap justify-content-between mb-2">
+                                                    <h5 class="mb-2 text-body-highlight me-2">Email</h5> 
+                                                    <input class="form-control form-control-lg" name="email" type="text" placeholder="Enter email address" value="{{user.email}}">
+                                                </div> 
+                                            </div>
+                                            <div class="mb-4">
+                                                <div class="d-flex flex-wrap justify-content-between mb-2">
+                                                    <div class="col-8">
+                                                        <h5 class="mb-2 text-body-highlight me-3">Phone</h5>
+                                                        <input class="form-control form-control-lg" name="phone" type="text"
+                                                            placeholder="Enter phone number" value="{{user.phone}}">
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <h5 class="mb-2 text-body-highlight me-2">Weight (Kg)</h5>
+                                                    <input class="form-control form-control-lg" name="weight" type="number"
+                                                        placeholder="Enter weight" value="{{user.weight}}">
+                                                    </div>
+                                                    
+
+                                                </div>
+                                            </div>
+                                            <div class="mb-4">
+                                                <div class=" row d-flex flex-wrap justify-content-between mb-2">
+                                            
+                                                    <div class="col-6"> 
+                                                        <h5 class="mb-2 text-body-highlight me-2">Gender</h5> 
+                                                        <select class="form-select form-select-lg" name="gender">
+                                                            <option value="Male" {% if user.gender == 'Male' %}selected{% endif %}>Male</option>
+                                                            <option value="Female" {% if user.gender == 'Female' %}selected{% endif %}>Female</option>
+                                                            <option value="Other" {% if user.gender == 'Other' %}selected{% endif %}>Other</option> 
+                                                        </select>
+                                                    </div>
+                                                    
+                                            
+                                                    <div class="col-6"> 
+                                                        <h5 class="mb-2 text-body-highlight me-2">Date of Birth</h5> 
+                                                        <input class="form-control form-control-lg" name="dob" type="date" placeholder="Enter Date of Birth" value="{{ user.dob|date:'Y-m-d' }}">
+                                                    </div>
+                                                    
+                                            
+                                            
+                                                </div>
+                                            </div>
+                                            <div class="mb-4">
+                                                <div class="d-flex flex-wrap justify-content-between mb-2">
+                                                    <h5 class="mb-2 text-body-highlight me-2">Location</h5> 
+                                                    <input class="form-control form-control-lg" name="location" type="text" placeholder="Enter Address" value="{{user.location}}">
+
+                                                </div> 
+                                            </div>
+
+                                            <div class="">
+                                                <div class="d-flex flex-wrap justify-content-between mb-2">
+                                                    <button class="btn btn-primary btn-md" type="submit">Update</button>
+
+                                                </div>
+                                            </div> 
+                                        </form>
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        
+                        
+                        </div>
+
+
+
+
+
+<hr>
+
+
+
+                        <div class="mb-8">
+                       
+                            <div class="card" id="scrollspyDeals">
+                                <div class="card-body">
+                                    <h3 class="mb-5">Update Password</h3>
+                                    <div class="row g-3">
+
+
+
+                                        <form class="col-12" method="post" enctype="multipart/form-data" action="{% url 'updatePasscord' user.id %}" id="updatepassword">
+                                            {% csrf_token %}
+
+
+
+                                            <div class="mb-4">
+                                                <div class="">
+                                                    <h5 class="mb-2 text-body-highlight me-2">Current Password</h5> 
+                                                    <div class="form-icon-container" data-password="data-password">
+                                                        <input class="form-control form-control-lg form-icon-input" placeholder="Enter old password" name="current_password"
+                                                          id="password" type="password" />
+                                                        <span class="uil uil-eye form-icon-eye" id="togglePassword"></span>
+                                                      </div>
+                                                </div> 
+                                            </div>
+                                            <div class="mb-4">
+                                                <div class="">
+                                                    <h5 class="mb-2 text-body-highlight me-2">New Password</h5> 
+                                                    <div class="form-icon-container" data-password="data-password">
+                                                        <input class="form-control form-control-lg form-icon-input" placeholder="Enter new password" name="new_password"
+                                                          id="password1" type="password" />
+                                                        <span class="uil uil-eye form-icon-eye" id="togglePassword1"></span>
+                                                      </div>
+                                                </div> 
+                                            </div>
+                                            <div class="mb-4">
+                                                <div class="">
+                                                    <h5 class="mb-2 text-body-highlight me-2">Confirm New Password</h5> 
+                                                    <div class="form-icon-container" data-password="data-password">
+                                                        <input class="form-control form-control-lg form-icon-input" placeholder="Enter confirm new password" name="confirm_new_password"
+                                                          id="password2" type="password" />
+                                                        <span class="uil uil-eye form-icon-eye" id="togglePassword2"></span>
+                                                      </div>
+                                                </div> 
+                                            </div>
+                                           
+
+                                            <div class="">
+                                                <div class="d-flex flex-wrap justify-content-between mb-2">
+                                                    <button class="btn btn-primary btn-md" type="submit">Update Password</button>
+
+                                                </div>     
+                                            </div> 
+                                        </form>
+
+
+                                   
+
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        
+                        </div>
+
+
+
+                        <div class="mb-8"> 
+                            <div class="card" id="scrollspyEmails">
+                                <div class="card-body">
+                                    <h3 class="mb-5">Update Aircraft Type</h3>
+                                    <div class="row g-3">
+                                        <form class="col-12" method="post" enctype="multipart/form-data" action="{% url 'updateUserGruop' user.id %}">
+                                            {% csrf_token %}
+                                            <div class="row g-3"> 
+                                                {% for group in groups %}
+                                                    <div class="col-2">
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="checkbox" name="groups" value="{{ group.id }}" {% if group.id in user_groups_ids %}checked{% endif %} />
+                                                            <label class="form-check-label">{{ group.group_name }}</label>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                            <div class="mt-3">
+                                                <div class="d-flex flex-wrap justify-content-between mb-2">
+                                                    <button class="btn btn-primary btn-md" type="submit">Update Aircraft Type</button>
+                                                </div>     
+                                            </div> 
+                                        </form> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       
+                       
+                       <div class="mb-lg-15">
+                            <div class="card" id="scrollspyAttachments">
+                                <div class="card-body">
+                                    <h3 class="mb-3">Update Signature</h3>
+                                    <div class="row g-3">
+                                        <form class="col-12" method="post" enctype="multipart/form-data"
+                                            action="{% url 'updateUserSign' user.id %}">
+                                            {% csrf_token %}
+                                            <div class="row g-3">
+                                                <div class="col-lg-12 mb-3">
+                                                    <label class="text-body-highlight fw-bold mb-2">Signature</label>
+                                                    <input class="form-control form-control-lg" name="usersign" required
+                                                        type="file" accept=".jpg, .jpeg, .png, .gif, .bmp, .tiff">
+                                                </div>
+                                            </div>
+                                            <div class="mt-3">
+                                                <div class="d-flex flex-wrap justify-content-between mb-2">
+                                                    <button class="btn btn-primary btn-md" type="submit">Update
+                                                        Signature</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    User Not Found
+    {% endif %}
+    <footer class="footer position-absolute">
+        <div class="row g-0 justify-content-between align-items-center h-100">
+            <div class="col-12 col-sm-auto text-center">
+                <p class="mb-0 mt-2 mt-sm-0 text-body">Falcon iOS Application<span
+                        class="d-none d-sm-inline-block"></span><span class="d-none d-sm-inline-block mx-1">|</span><br
+                        class="d-sm-none" />2024 ~ <span id="year"></span><script>document.getElementById("year").textContent = new Date().getFullYear();</script> &copy;</p>
+            </div>
+            <div class="col-12 col-sm-auto text-center">
+                <p class="mb-0 text-body-tertiary text-opacity-85">v1</p>
+            </div>
+        </div>
+    </footer>
+</div>
+
+
+
+
+{% if saved_message %}
+
+
+<style>
+    div#liveToast{ 
+    border-left: 4px solid #5cb85c !important; 
+  }
+ 
+</style>
+
+
+
+
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="liveToast" class="toast slide-in-right align-items-center text-bg-primary border-0" role="alert"
+        aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                {{saved_message}}
+            </div>
+            <button type="button" class="btn-close text-black bn-sm me-2 m-auto" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.onload = function () {
+        const toastLiveExample = document.getElementById('liveToast');
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+        toastBootstrap.show();
+    };
+</script>
+
+{% endif %}
+
+
+
+<style>
+    .slide-in-right {
+        transform: translateX(100%);
+        animation: slide-in 1s forwards;
+    }
+
+    @keyframes slide-in {
+        from {
+            transform: translateX(100%);
+        }
+
+        to {
+            transform: translateX(0);
+        }
+    }
+</style>
+
+<script>
+    document.querySelectorAll('.form-icon-eye').forEach(icon => {
+        icon.addEventListener('click', function () {
+            const input = this.previousElementSibling;
+            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+            input.setAttribute('type', type);
+            this.classList.toggle('uil-eye-slash'); // Toggle icon
+        });
+    });
+</script>
+
+
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const passwordText = document.getElementById('passwordText');
+        const togglePassword = document.getElementById('togglePassword');
+        const copyButton = document.getElementById('copyButton');
+ 
+        const actualPassword = "{{user.password}}";
+        passwordText.dataset.original = actualPassword;
+
+        togglePassword.addEventListener('click', () => {
+            // Toggle between asterisks and the actual password
+            if (passwordText.textContent === '*****') {
+                passwordText.textContent = actualPassword;
+                togglePassword.classList.remove('uil-eye');
+                togglePassword.classList.add('uil-eye-slash');
+            } else {
+                passwordText.textContent = '*****';
+                togglePassword.classList.remove('uil-eye-slash');
+                togglePassword.classList.add('uil-eye');
+            }
+        });
+
+        copyButton.addEventListener('click', () => {
+            // Copy password to clipboard
+            navigator.clipboard.writeText(actualPassword)
+                .then(() => {
+                    alert('Password copied to clipboard!');
+                })
+                .catch(err => {
+                    console.error('Failed to copy password: ', err);
+                });
+        });
+    });
+</script>
+
+
+
+
+<script>
+    var navLink = document.getElementById('nav2');
+    navLink.classList.add('active');
+</script>
+{% endblock %}

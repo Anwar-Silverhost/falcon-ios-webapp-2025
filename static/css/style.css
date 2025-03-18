@@ -1,0 +1,58 @@
+.btn-primary {
+    background-color: #AA182C !important;
+}
+
+.btn-primary:hover {
+    background-color: #000000 !important;
+    color: white !important;
+}
+
+.form-icon-container .form-icon-eye {
+    position: absolute;
+    top: 4px;
+    right: 1rem !important;
+    font-size: 22px;
+}
+
+.navbar-vertical .navbar-vertical-content .navbar-nav .nav-link.active {
+    color: #AA182C !important;
+}
+
+.navbar-vertical-collapsed .navbar-vertical.navbar-expand-lg .nav-item-wrapper:has(.active) .label-1 .nav-link-icon {
+    color: #AA182C !important;
+}
+
+a {
+    color: #000000 !important;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #AA182C !important; 
+}
+
+[data-list] li.active .page {
+    color: #fff;
+    background-color: #AA182C !important;
+}
+
+div#liveToast,div#liveErrorToast,div#liveToast_loader {
+    background-color: white !important;
+    color: black !important;
+    border-left: 4px solid #AA182C !important;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+}
+
+ 
+
+
+.nav-item-wrapper a.nav-link{
+    font-size: 15px !important;
+    padding: 10px 30px !important;
+}
+
+.navbar-expand-lg .navbar-nav .nav-link {
+    padding: 12px !important;
+}
+
+ 

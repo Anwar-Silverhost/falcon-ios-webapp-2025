@@ -1,0 +1,198 @@
+{% extends 'admin/admin_navbar.html' %}
+{% block content %}
+{% load static %}
+
+
+<div class="content">
+    <div class="row">
+        <div class="col-md-9">
+            <div class=" ">
+                <div class="card-body">
+                    <div class="mx-n4 px-4  bg-body-emphasis">
+                        <div>
+                            <div class="row align-items-end justify-content-between pb-5 g-3">
+                                <div class="col-auto">
+                                    <h2 class="mb-0">Designation</h2>
+                                </div>
+                                <div class="col-12 col-md-auto">
+                                   
+                                </div>
+                            </div>
+                            <div class="table-responsive mx-n1 px-1 scrollbar">
+                                <table class="table fs-9 mb-0 border-top border-translucent table-bordered ">
+                                    <thead>
+                                        <tr>
+
+                                            <th class="sort white-space-nowrap align-middle" scope="col"
+                                                style="min-width:100%;" data-sort="product">&nbsp;&nbsp;&nbsp;NAME</th>
+                                            <th class="sort align-middle" scope="col" data-sort="customer"
+                                                style="min-width:100%;">
+                                                &nbsp;&nbsp;&nbsp;USER COUNT</th>
+
+                                            <th class="sort text-end pe-0 align-middle" scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="list" id="table-latest-review-body">
+
+                                        {% for d in des %}
+                                        <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+
+                                            <td class="align-middle product white-space-nowrap ps-2">&nbsp;&nbsp;&nbsp;{{d.designation}} 
+                                            <td class="align-middle customer white-space-nowrap">&nbsp;&nbsp;&nbsp;{{d.count}}</td> 
+                                            <td class="align-middle white-space-nowrap text-center pe-0">
+
+                                                <div class="btn-reveal-trigger position-static">
+                                                    <button
+                                                        class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10"
+                                                        type="button" data-bs-toggle="dropdown" data-boundary="window"
+                                                        aria-haspopup="true" aria-expanded="false"
+                                                        data-bs-reference="parent"><span class="fas fa-trash fs-1"
+                                                            style="color: #AA182C;"></span></button> 
+                                                    <div class="dropdown-menu  dropdown-menu-end py-2"><a
+                                                            class="dropdown-item readonly disabled" href="#!">Are you
+                                                            sure to delete {{d.designation}} designation ?</a> 
+                                                        <div class="dropdown-divider"> 
+                                                        </div>
+                                                        <div class="row ps-3 pe-3">
+                                                            <div class="col-6"><a
+                                                                    class="dropdown-item text-center">No</a></div>
+                                                            <div class="col-6"><a
+                                                                    class="dropdown-item text-danger text-center"
+                                                                    href="{% url 'delete_designation' d.id %}">Yes</a></div> 
+                                                        </div> 
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        {% endfor %}
+
+
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row align-items-center py-1">
+                                <div class="pagination d-none"></div>
+                                <div class="col d-flex fs-9">
+                                    <p class="mb-0 d-none d-sm-block me-3 fw-semibold text-body"
+                                        data-list-info="data-list-info"></p><a class="fw-semibold" href="#!"
+                                        data-list-view="*">View all<span class="fas fa-angle-right ms-1"
+                                            data-fa-transform="down-1"></span></a><a class="fw-semibold d-none"
+                                        href="#!" data-list-view="less">View Less</a>
+                                </div>
+                                <div class="col-auto d-flex">
+                                    <button class="btn btn-link px-1 me-1" type="button" title="Previous"
+                                        data-list-pagination="prev"><span
+                                            class="fas fa-chevron-left me-2"></span>Previous</button><button
+                                        class="btn btn-link px-1 ms-1" type="button" title="Next"
+                                        data-list-pagination="next">Next<span
+                                            class="fas fa-chevron-right ms-2"></span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Add Designation</h4>
+
+                    <form action="{% url 'save_designation' %}" enctype="multipart/form-data" method="post">
+                        {% csrf_token %}
+                        <div class="form-group mb-3">
+                            <input type="text" class="form-control" id="designation" name="designation" required
+                                placeholder="Enter Designation">
+
+                        </div>
+                        <button class="btn btn-phoenix-primary w-100" type="submit">Save</button>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <footer class="footer position-absolute">
+        <div class="row g-0 justify-content-between align-items-center h-100">
+            <div class="col-12 col-sm-auto text-center">
+                <p class="mb-0 mt-2 mt-sm-0 text-body">Falcon iOS Application<span
+                        class="d-none d-sm-inline-block"></span><span class="d-none d-sm-inline-block mx-1">|</span><br
+                        class="d-sm-none" />2024 ~ <span id="year"></span><script>document.getElementById("year").textContent = new Date().getFullYear();</script> &copy; </p>
+            </div>
+            <div class="col-12 col-sm-auto text-center">
+                <p class="mb-0 text-body-tertiary text-opacity-85">v1</p>
+            </div>
+        </div>
+    </footer>
+
+</div>
+
+
+
+
+{% if saved_message %}
+
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="liveToast" class="toast slide-in-right align-items-center text-bg-primary border-0" role="alert"
+        aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                {{saved_message}}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.onload = function () {
+        const toastLiveExample = document.getElementById('liveToast');
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+        toastBootstrap.show();
+    };
+</script>
+
+{% endif %}
+
+
+
+<style>
+    .slide-in-right {
+        transform: translateX(100%);
+        animation: slide-in 1s forwards;
+    }
+
+    @keyframes slide-in {
+        from {
+            transform: translateX(100%);
+        }
+
+        to {
+            transform: translateX(0);
+        }
+    }
+</style>
+
+
+
+
+
+
+
+
+
+<script>
+    var navLink = document.getElementById('nav4');
+    navLink.classList.add('active');
+</script>
+{% endblock %}

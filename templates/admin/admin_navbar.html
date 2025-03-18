@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Falcon</title>
+    <link rel="shortcut icon" href="{% static 'logo/favicon.svg' %}" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'logo/favicon.svg' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'logo/favicon.svg' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'logo/favicon.svg' %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'logo/favicon.svg' %}">
+    <!-- <link rel="manifest" href="../../../assets/img/favicons/manifest.json"> -->
+    <meta name="msapplication-TileImage" content="{% static 'logo/favicon.svg' %}">
+    <meta name="theme-color" content="#ffffff">
+    <script src="{% static 'js/simplebar.min.js' %}"></script>
+    <script src="{% static 'js/config.js' %}"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&amp;display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/choices.min.css' %}"> 
+    <link rel="stylesheet" href="{% static 'css/flatpickr.min.css' %}">
+
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+    <link rel="stylesheet" href="{% static 'css/line.css' %}">
+    <link rel="stylesheet" href="{% static 'css/simplebar.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/theme-rtl.min.css' %}" id="style-rtl">
+    <link rel="stylesheet" href="{% static 'css/theme.min.css' %}" id="style-default">
+    <link rel="stylesheet" href="{% static 'css/user-rtl.min.css' %}" id="user-style-rtl">
+    <link rel="stylesheet" href="{% static 'css/user.min.css' %}" id="user-style-default">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <script>
+        var phoenixIsRTL = window.config.config.phoenixIsRTL;
+        if (phoenixIsRTL) {
+            var linkDefault = document.getElementById('style-default');
+            var userLinkDefault = document.getElementById('user-style-default');
+            linkDefault.setAttribute('disabled', true);
+            userLinkDefault.setAttribute('disabled', true);
+            document.querySelector('html').setAttribute('dir', 'rtl');
+        } else {
+            var linkRTL = document.getElementById('style-rtl');
+            var userLinkRTL = document.getElementById('user-style-rtl');
+            linkRTL.setAttribute('disabled', true);
+            userLinkRTL.setAttribute('disabled', true);
+        }
+    </script>
+
+    <link rel="stylesheet" href="{% static 'css/leaflet.css' %}">
+    <link rel="stylesheet" href="{% static 'css/MarkerCluster.css' %}">
+    <link rel="stylesheet" href="{% static 'css/MarkerCluster.Default.css' %}">
+
+</head>
+
+<body>
+    <!-- ===============================================-->
+    <!--    Main Content-->
+    <!-- ===============================================-->
+    <main class="main" id="top">
+        {% for a in admin %}
+ 
+        <nav class="navbar navbar-vertical navbar-expand-lg" style="display:none;">
+            <div class="collapse navbar-collapse" id="navbarVerticalCollapse">
+                <!-- scrollbar removed-->
+                <div class="navbar-vertical-content">
+                    <ul class="navbar-nav flex-column" id="navbarVerticalNav">
+
+                        <p class="navbar-vertical-label">Section 1</p>
+                        <div class="nav-item-wrapper">
+                            <a class="nav-link label-1" id="nav1" href="{% url 'dashboard' %}" role="button" 
+                                data-bs-toggle="" aria-expanded="false">
+                                <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                                            data-feather="home"></span></span><span
+                                        class="nav-link-text-wrapper"><span class="nav-link-text">Home</span></span>
+                                </div>
+                            </a>
+                        </div> 
+                        <div class="nav-item-wrapper">
+                            <a class="nav-link label-1" id="nav2" href="{% url 'all-users' %}" role="button" 
+                                data-bs-toggle="" aria-expanded="false">
+                                <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                                            data-feather="users"></span></span><span
+                                        class="nav-link-text-wrapper"><span class="nav-link-text">Users</span></span>
+                                </div>
+                            </a>
+                        </div> 
+                        <div class="nav-item-wrapper">
+                            <a class="nav-link label-1"  id="nav6" href="{% url 'filemanager' %}" role="button" 
+                                data-bs-toggle="" aria-expanded="false">
+                                <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                                            data-feather="file-text"></span></span><span
+                                        class="nav-link-text-wrapper"><span class="nav-link-text">File Manager</span></span>
+                                </div>
+                            </a>
+                        </div> 
+
+                        <div class="nav-item-wrapper">
+                            <a class="nav-link label-1"  id="nav5" href="{% url 'groups' %}" role="button" 
+                                data-bs-toggle="" aria-expanded="false">
+                                <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                                            data-feather="align-left"></span></span><span
+                                        class="nav-link-text-wrapper"><span class="nav-link-text">Aircraft Type</span></span>
+                                </div>
+                            </a>
+                        </div> 
+
+
+                        <div class="nav-item-wrapper">
+                            <a class="nav-link label-1"  id="nav3" href="{% url 'category' %}" role="button" 
+                                data-bs-toggle="" aria-expanded="false">
+                                <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                                            data-feather="folder"></span></span><span
+                                        class="nav-link-text-wrapper"><span class="nav-link-text">Category</span></span>
+                                </div>
+                            </a>
+                        </div> 
+                        <div class="nav-item-wrapper">
+                            <a class="nav-link label-1"  id="nav4" href="{% url 'designation' %}" role="button" 
+                                data-bs-toggle="" aria-expanded="false">
+                                <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                                            data-feather="grid"></span></span><span
+                                        class="nav-link-text-wrapper"><span class="nav-link-text">Designation</span></span>
+                                </div>
+                            </a>
+                        </div> 
+
+                        <div class="nav-item-wrapper">
+                            <a class="nav-link label-1"  id="nav7" href="{% url 'home_apps' %}" role="button" 
+                                data-bs-toggle="" aria-expanded="false">
+                                <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                                            data-feather="slack"></span></span><span
+                                        class="nav-link-text-wrapper"><span class="nav-link-text">Application</span></span>
+                                </div>
+                            </a>
+                        </div> 
+                        
+
+                        <p class="navbar-vertical-label">Section 2</p>
+
+                        <div class="nav-item-wrapper">
+                            <a class="nav-link label-1"  id="nav20" href="{% url 'forms' %}" role="button" 
+                                data-bs-toggle="" aria-expanded="false">
+                                <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                                            data-feather="layers"></span></span><span
+                                        class="nav-link-text-wrapper"><span class="nav-link-text">Forms</span></span>
+                                </div>
+                            </a>
+                        </div> 
+                        <div class="nav-item-wrapper">
+                            <a class="nav-link label-1"  id="nav21" href="{% url 'dailyForm'  %}" role="button" 
+                                data-bs-toggle="" aria-expanded="false">
+                                <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                                            data-feather="pen-tool"></span></span><span
+                                        class="nav-link-text-wrapper"><span class="nav-link-text">Loading & Trim</span></span>
+                                </div>
+                            </a>
+                        </div> 
+                        
+                        
+                        
+                         
+
+                        
+                        
+
+
+
+
+                    </ul>
+                </div>
+            </div>
+            <div class="navbar-vertical-footer"><button
+                    class="btn navbar-vertical-toggle border-0 fw-semibold w-100 white-space-nowrap d-flex align-items-center"><span
+                        class="uil uil-left-arrow-to-left fs-8"></span><span
+                        class="uil uil-arrow-from-right fs-8"></span><span
+                        class="navbar-vertical-footer-text ms-2">Collapsed View</span></button></div>
+        </nav>
+        <nav class="navbar navbar-top fixed-top navbar-expand" id="navbarDefault" style="display:none;">
+            <div class="collapse navbar-collapse justify-content-between">
+                <div class="navbar-logo">
+                    <button class="btn navbar-toggler navbar-toggler-humburger-icon hover-bg-transparent" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#navbarVerticalCollapse"
+                        aria-controls="navbarVerticalCollapse" aria-expanded="false"
+                        aria-label="Toggle Navigation"><span class="navbar-toggle-icon"><span
+                                class="toggle-line"></span></span></button>
+                    <a class="navbar-brand me-1 me-sm-3" href="dashboard">
+                        <div class="d-flex align-items-center">
+                            <div class="d-flex align-items-center"><img src="{% static 'logo/FALCON_LOGO_b.png' %}" alt="phoenix"
+                                    width="150" />
+                                <!-- <h5 class="logo-text ms-2 d-none d-sm-block">phoenix</h5> -->
+                            </div>
+                        </div>
+                    </a>
+ 
+
+                </div>
+               
+                <ul class="navbar-nav navbar-nav-icons flex-row">
+                     
+                    <li class="nav-item dropdown"><a class="nav-link lh-1 pe-0" id="navbarDropdownUser" href="#!"
+                            role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
+                            aria-expanded="false">
+                            <div class="avatar avatar-l ">
+                                <img class="rounded-circle " src="{% static 'logo/favicon.svg' %}" alt="" />
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end navbar-dropdown-caret py-0 dropdown-profile shadow border"
+                            aria-labelledby="navbarDropdownUser">
+                            <div class="card position-relative border-0">
+                                <div class="card-body p-0">
+                                    <div class="text-center pt-4 pb-3">
+                                        <div class="avatar avatar-xl ">
+                                            <img class="rounded-circle " src="{% static 'logo/favicon.svg' %}" alt="" />
+                                        </div>
+
+
+                                        <h6 class="mt-2 text-body-emphasis">{{ a.first_name }}</h6>
+                                        {% if a.is_superuser %}
+                                        <span class="badge badge-phoenix badge-phoenix-primary">Super Admin</span>
+                                        {% elif a.is_staff %}
+                                        <span class="badge badge-phoenix badge-phoenix-info">Admin</span>
+                                        {% endif %}
+                                        
+                                    </div>
+                                    <div class="mx-3 d-flex justify-content-center">
+                                        <p id="time"></p> 
+                                        <script>
+                                            var timeDisplay = document.getElementById("time"); 
+                                            function refreshTime() {
+                                                var dateString = new Date().toLocaleString("en-US", {timeZone: 'Asia/Dubai'});
+                                                var formattedString = dateString.replace(", ", " - ");
+                                                timeDisplay.innerHTML = formattedString;
+                                            } 
+                                            setInterval(refreshTime, 1000);
+                                        </script>
+                                        
+                                        </div>
+                                </div>
+                                 
+                                <div class="card-footer p-0 border-top border-translucent">
+                                    <ul class="nav d-flex flex-column my-3">
+                                        <li class="nav-item active ">
+                                            <a class="nav-link active px-3 d-block" id="nav10a" href="{% url 'admin_update_details' %}"> 
+                                                <span class="me-2 text-body align-bottom" data-feather="user"></span>
+                                                <span>Update Password</span>
+                                            </a> 
+                                        </li>
+                                       
+                                        {% if a.is_superuser %}
+                                        <li id="Sub1" class="nav-item">
+                                            <a class="nav-link px-3 d-block" href="{% url 'new_admins' %}">
+                                                 <span class="me-2 text-body align-bottom" data-feather="user-plus"></span>
+                                                 <span>Add Another Account</span>
+                                            </a>
+                                        </li>
+                                        {% endif %}
+                                    </ul>
+                                    <hr />
+                                    <div class="px-3"> <a class="btn btn-phoenix-secondary d-flex flex-center w-100"
+                                            href="{% url 'admin_logout' %}"> <span class="me-2" data-feather="log-out"> </span>Sign out</a>
+                                    </div>
+                                    <div class="my-2 text-center fw-bold fs-10 text-body-quaternary">
+                                        <!-- <a
+                                            class="text-body-quaternary me-1" href="#!">Privacy policy</a>&bull;<a
+                                            class="text-body-quaternary mx-1" href="#!">Terms</a>&bull;<a
+                                            class="text-body-quaternary ms-1" href="#!">Cookies</a> -->
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+         
+        <script>
+            var navbarTopShape = window.config.config.phoenixNavbarTopShape;
+            var navbarPosition = window.config.config.phoenixNavbarPosition;
+            var body = document.querySelector('body');
+            var navbarDefault = document.querySelector('#navbarDefault');
+            var navbarTop = document.querySelector('#navbarTop');
+            var topNavSlim = document.querySelector('#topNavSlim');
+            var navbarTopSlim = document.querySelector('#navbarTopSlim');
+            var navbarCombo = document.querySelector('#navbarCombo');
+            var navbarComboSlim = document.querySelector('#navbarComboSlim');
+            var dualNav = document.querySelector('#dualNav');
+
+            var documentElement = document.documentElement;
+            var navbarVertical = document.querySelector('.navbar-vertical');
+
+            if (navbarPosition === 'dual-nav') {
+                topNavSlim?.remove();
+                navbarTop?.remove();
+                navbarTopSlim?.remove();
+                navbarCombo?.remove();
+                navbarComboSlim?.remove();
+                navbarDefault?.remove();
+                navbarVertical?.remove();
+                dualNav.removeAttribute('style');
+                document.documentElement.setAttribute('data-navigation-type', 'dual');
+
+            } else if (navbarTopShape === 'slim' && navbarPosition === 'vertical') {
+                navbarDefault?.remove();
+                navbarTop?.remove();
+                navbarTopSlim?.remove();
+                navbarCombo?.remove();
+                navbarComboSlim?.remove();
+                topNavSlim.style.display = 'block';
+                navbarVertical.style.display = 'inline-block';
+                document.documentElement.setAttribute('data-navbar-horizontal-shape', 'slim');
+
+            } else if (navbarTopShape === 'slim' && navbarPosition === 'horizontal') {
+                navbarDefault?.remove();
+                navbarVertical?.remove();
+                navbarTop?.remove();
+                topNavSlim?.remove();
+                navbarCombo?.remove();
+                navbarComboSlim?.remove();
+                dualNav?.remove();
+                navbarTopSlim.removeAttribute('style');
+                document.documentElement.setAttribute('data-navbar-horizontal-shape', 'slim');
+            } else if (navbarTopShape === 'slim' && navbarPosition === 'combo') {
+                navbarDefault?.remove();
+                navbarTop?.remove();
+                topNavSlim?.remove();
+                navbarCombo?.remove();
+                navbarTopSlim?.remove();
+                dualNav?.remove();
+                navbarComboSlim.removeAttribute('style');
+                navbarVertical.removeAttribute('style');
+                document.documentElement.setAttribute('data-navbar-horizontal-shape', 'slim');
+            } else if (navbarTopShape === 'default' && navbarPosition === 'horizontal') {
+                navbarDefault?.remove();
+                topNavSlim?.remove();
+                navbarVertical?.remove();
+                navbarTopSlim?.remove();
+                navbarCombo?.remove();
+                navbarComboSlim?.remove();
+                dualNav?.remove();
+                navbarTop.removeAttribute('style');
+                document.documentElement.setAttribute('data-navigation-type', 'horizontal');
+            } else if (navbarTopShape === 'default' && navbarPosition === 'combo') {
+                topNavSlim?.remove();
+                navbarTop?.remove();
+                navbarTopSlim?.remove();
+                navbarDefault?.remove();
+                navbarComboSlim?.remove();
+                dualNav?.remove();
+                navbarCombo.removeAttribute('style');
+                navbarVertical.removeAttribute('style');
+                document.documentElement.setAttribute('data-navigation-type', 'combo');
+            } else {
+                topNavSlim?.remove();
+                navbarTop?.remove();
+                navbarTopSlim?.remove();
+                navbarCombo?.remove();
+                navbarComboSlim?.remove();
+                dualNav?.remove();
+                navbarDefault.removeAttribute('style');
+                navbarVertical.removeAttribute('style');
+            }
+
+            var navbarTopStyle = window.config.config.phoenixNavbarTopStyle;
+            var navbarTop = document.querySelector('.navbar-top');
+            if (navbarTopStyle === 'darker') {
+                navbarTop.setAttribute('data-navbar-appearance', 'darker');
+            }
+
+            var navbarVerticalStyle = window.config.config.phoenixNavbarVerticalStyle;
+            var navbarVertical = document.querySelector('.navbar-vertical');
+            if (navbarVerticalStyle === 'darker') {
+                navbarVertical.setAttribute('data-navbar-appearance', 'darker');
+            }
+        </script> 
+        {% block content %}
+
+
+     
+
+        {% endblock %}
+        {% endfor %}
+
+
+    </main><!-- ===============================================-->
+    <!--    End of Main Content-->
+    <!-- ===============================================-->
+
+
+
+ 
+
+
+
+
+
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/anchor.min.js' %}"></script>
+    <script src="{% static 'js/is.min.js' %}"></script>
+    <script src="{% static 'js/all.min.js' %}"></script>
+    <script src="{% static 'js/lodash.min.js' %}"></script>
+    <script src="{% static 'js/list.min.js' %}"></script>
+    <script src="{% static 'js/feather.min.js' %}"></script>
+    <script src="{% static 'js/dayjs.min.js' %}"></script>
+    <script src="{% static 'js/leaflet.js' %}"></script>
+    <script src="{% static 'js/leaflet.markercluster.js' %}"></script>
+    <script src="{% static 'js/leaflet-tilelayer-colorfilter.min.js' %}"></script>
+    <script src="{% static 'js/phoenix.js' %}"></script>
+    <script src="{% static 'js/crm-dashboard.js' %}"></script>
+    <script src="{% static 'js/imagesloaded.pkgd.min.js' %}"></script>
+    <script src="{% static 'js/echarts.min.js' %}"></script>
+    <script src="{% static 'js/ecommerce-dashboard.js' %}"></script>
+    <script src="{% static 'js/choices.min.js' %}"></script>
+    <script src="{% static 'js/Sortable.min.js' %}"></script>
+    <script src="{% static 'js/flatpickr.min.js' %}"></script> 
+
+</body>
+
+</html>

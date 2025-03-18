@@ -1,0 +1,536 @@
+{% extends 'admin/admin_navbar.html' %} {% block content %} {% load static %}
+
+<div class="content">
+    <div class="pb-8">
+        <div id="reports">
+            <div class="row g-3 justify-content-between align-items-end mb-2">
+                <div class="col-12">
+                    <div class="d-md-flex justify-content-between">
+                        <div class="mb-3">
+                            <h2 class="mb-0">Loading & Trim</h2>
+                        </div>
+                        <div class="d-flex mb-3">
+                            <input class="form-control search-input search me-3" type="search"
+    placeholder="Search File" aria-label="Search" id="searchInput"/>
+
+
+                            <button class="btn px-3 btn-primary" type="button" data-bs-toggle="modal"
+                                data-bs-target="#uploadSignForm" aria-haspopup="true" aria-expanded="false"
+                                data-bs-reference="parent">
+                                Upload
+                            </button>
+                            <div class="modal fade" id="uploadSignForm" tabindex="-1">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content border border-translucent">
+                                        <form id="" action="{% url 'save_dailyForm' %}" method="post" enctype="multipart/form-data" autocomplete="off">
+                                            {% csrf_token %}
+                                            <div class="modal-header justify-content-between border-translucent">
+                                                <h5 class="modal-title text-body-highlight   d-flex align-items-center">
+                                                    Daily Sign From Upload</p>
+
+                                                </h5>
+                                                <button class="btn p-1 text-danger" type="button"
+                                                    data-bs-dismiss="modal" aria-label="Close">
+                                                    <span class="fas fa-times fs-9"> </span>
+                                                </button> 
+                                            </div>
+                                            <div class="modal-body pt-4 pb-2 px-4">
+                                                <div class="mb-2 col-md-12">
+                                                    <div class="form-floating">
+                                                        <input class="form-control" id="floatingInputGridDate"
+                                                            type="date" name="date" required placeholder="Date" />
+                                                        <label for="floatingInputGrid">Date</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-2 col-md-12">
+                                                    <div class="form-floating">
+                                                        <select class="form-select" id="groupSelect" name="maingroup"
+                                                            required>
+                                                            <option selected="selected" value="0">Select aircraft type
+                                                            </option>
+                                                            {% for group in groups %}
+                                                            {% if not group.parent_group %}
+                                                            <option value="{{ group.id }}">{{ group.group_name }}
+                                                            </option>
+                                                            {% endif %}
+                                                            {% endfor %}
+                                                        </select>
+                                                        <label for="groupSelect">Select Aircraft Type</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-2 col-md-12">
+                                                    <div class="form-floating">
+                                                        <select class="form-select" id="subGroupSelect" name="subgroup">
+                                                            <option selected="selected" value="0">Select parent aircraft
+                                                                type</option>
+                                                            {% for group in groups %}
+                                                            {% if group.parent_group %}
+                                                            <option class="subgroup-option"
+                                                                data-parent="{{ group.parent_group.id }}"
+                                                                value="{{ group.id }}" style="display:none;">
+                                                                {{ group.group_name }}
+                                                            </option>
+                                                            {% endif %}
+                                                            {% endfor %}
+                                                        </select>
+                                                        <label for="subGroupSelect">Select Parent Aircraft Type</label>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-2 col-md-12">
+                                                    <div class="form-floating"><input class="form-control"
+                                                            id="floatingInputGrid" type="text" name="pdfname" required
+                                                            placeholder="Pdf Name" /><label for="floatingInputGrid">Pdf
+                                                            Name</label></div>
+                                                </div>
+
+
+                                                <div class="mb-2 col-md-12">
+                                                    <input class="form-control form-control-lg" required
+                                                        id="floatingInputGrid" name="pdffile" type="file"
+                                                        accept=".pdf" />
+
+
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="modal-footer d-flex justify-content-end align-items-center px-4 pb-4 border-0 pt-3">
+
+                                                <button class="btn btn-sm btn-primary px-9 fs-10 my-0" type="submit">
+                                                    Save
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="table-responsive scrollbar">
+            <table class="table fs-9 mb-0 border-top border-translucent" id="fileTable">
+                <thead>
+                    <tr>
+                        <th class="sort white-space-nowrap align-middle ps-0" scope="col" data-sort="projectName"style="width:7%;"></th>
+                        <th class="sort align-middle ps-3" scope="col" data-sort="projectName"style="width:25%;">FILE NAME</th>
+                        <th class="sort align-middle ps-3" scope="col" data-sort="start" style="width:10%;">DATE</th>
+                        <th class="sort align-middle ps-3" scope="col" data-sort="deadline" style="width:15%;">AIRCRAFT TYPE
+                        </th>
+                        <th class="sort align-middle ps-3" scope="col" data-sort="task" style="width:15%;">AIRCRAFT REG.</th>
+                        <th class="sort align-middle ps-3" scope="col" data-sort="projectprogress" style="width:15%;">
+                            SIGN COUNTS</th>
+                        <th class="sort align-middle text-end" scope="col" data-sort="statuses" style="width:10%;">
+                            STATUS</th>
+                        <th class="sort align-middle text-end" scope="col" style="width:10%;"></th>
+                    </tr>
+                </thead>
+                <tbody class="list" id="project-list-table-body">
+
+
+                    {% for s in signfiles %}
+                      
+                    <tr class="position-static">
+                        <td class="align-middle time white-space-nowrap ps-0 projectName py-4">
+                            <span
+                                class="badge badge-phoenix fs-10 badge-phoenix-success">{{s.signfile_Id}}</span></td>
+                        <td class="align-middle white-space-nowrap start ps-3 py-4"><a class="fw-bold fs-8"
+                                href="#">{{s.signfile_Name}}</a></td>
+                  
+                        <td class="align-middle white-space-nowrap start ps-3 py-4">
+                            <p class="mb-0 fs-9 text-body">{{s.signfile_Date}}</p>
+                        </td>
+                        <td class="align-middle white-space-nowrap deadline ps-3 py-4">
+                            <p class="mb-0 fs-9 text-body">{{s.Aircraft_Type}}</p>
+                        </td>
+                        <td class="align-middle white-space-nowrap task ps-3 py-4">
+                            <p class="fw-bo text-body fs-9 mb-0">{{s.Aircraft_Reg}}</p>
+                        </td>
+                        <td class="align-middle white-space-nowrap ps-3 projectprogress">
+                            <p class="text-body-secondary fs-10 mb-0">{{s.signature_count}}</p>
+                      
+                        </td>
+                        <td class="align-middle white-space-nowrap text-end statuses">
+
+                            {% if s.status == '1' %}
+                            <span class="badge badge-phoenix fs-10 badge-phoenix-success">Active</span>
+                            {% elif s.status == '0'  %}
+                            <span class="badge badge-phoenix fs-10 badge-phoenix-danger">Inactive</span>
+                            {% endif %}
+
+
+                            
+                        
+                        
+                        </td>
+
+
+                        <td class="align-middle text-end white-space-nowrap pe-0 action">
+                            <div class="btn-reveal-trigger position-static"><button
+                                    class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10"
+                                    type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true"
+                                    aria-expanded="false" data-bs-reference="parent"><span
+                                        class="fas fa-ellipsis-h fs-10"></span></button>
+                                <div class="dropdown-menu dropdown-menu-end py-2">
+                                    
+                                    
+                                    <a class="dropdown-item" type="button" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#viewFile_{{s.id}}" aria-haspopup="true" aria-expanded="false"
+                                    data-bs-reference="parent" >View File</a>
+
+
+                                    <a class="dropdown-item" type="button" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#editFile_{{s.id}}" aria-haspopup="true" aria-expanded="false"
+                                    data-bs-reference="parent">Edit</a>
+
+                                    <a class="dropdown-item" type="button" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#viewSignedCustomers_{{s.id}}" aria-haspopup="true" aria-expanded="false"
+                                    data-bs-reference="parent">Signed List</a>
+
+
+
+                                    <div class="dropdown-divider"></div>
+                                    
+                                    <a class="dropdown-item text-danger" href="#!" data-bs-toggle="modal" data-bs-target="#exampleModal_{{s.id}}">Remove</a>
+                                    
+
+
+
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+
+
+                    <div class="modal modal-sm fade" id="exampleModal_{{s.id}}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel">Delete the file?</h5><button class="btn btn-close p-1" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div> 
+                            <div class="modal-footer">
+                                <a href="{% url 'delete_signFile' s.id %}" class="btn btn-primary text-white" type="button">Delete</a>
+                                <button class="btn btn-outline-primary" type="button" data-bs-dismiss="modal">Cancel</button></div>
+                          </div>
+                        </div>
+                      </div>
+
+                      
+
+
+                    <div class="modal fade" id="viewSignedCustomers_{{s.id}}" tabindex="-1">
+                        <div class="modal-dialog  modal-dialog-centered">
+                            <div class="modal-content border border-translucent">
+                                <div class="modal-header justify-content-between border-translucent">
+                                    <h5 class="modal-title text-body-highlight d-flex align-items-center">
+                                        Capt. Signed List For {{s.signfile_Name}}
+                                    </h5>
+                                    <button class="btn p-1 text-danger" type="button" data-bs-dismiss="modal" aria-label="Close">
+                                        <span class="fas fa-times fs-9"></span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+
+                                    {% for signed in signedUsers %} 
+                                    {% if s.id == signed.signFile_is.id %} 
+
+                                    <div
+                                        class="row justify-content-between align-items-md-center hover-actions-trigger btn-reveal-trigger border-translucent py-3 gx-0 border-bottom">
+                                        <div class="col-12 col-lg-auto flex-1">
+                                            <h5>{{signed.user_is.firstname}} {{signed.user_is.lastname}}</h5>
+                                        </div>
+                                        <div class="col-12 col-lg-auto">
+                                            <div class="d-flex ms-4 lh-1 align-items-center"> 
+                                                <div class="d-none d-lg-block end-0 position-absolute" style="top: 23%;">
+                                                    <div class="hover-actions end-0">
+
+                                                        <a target="_blank" href="{{signed.signedpdf_file.url}}" class="btn btn-phoenix-primary btn-outline-pribtn-phoenix-primary" href="">View</a>
+                                                         
+                                                    </div>
+                                                </div>
+                                                <div class="hover-lg-hide">
+                                                    <p class="text-body-tertiary fs-10 ps-lg-3  fw-bold mb-md-0 mb-0">{{signed.created_at}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    
+
+
+
+                                    {% endif %}
+ 
+                                    {% endfor %}
+
+
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                    <div class="modal fade" id="editFile_{{s.id}}" tabindex="-1">
+                        <div class="modal-dialog  modal-dialog-centered">
+                            <div class="modal-content border border-translucent">
+                                <div class="modal-header justify-content-between border-translucent">
+                                    <h5 class="modal-title text-body-highlight   d-flex align-items-center">
+                                       Edit {{s.signfile_Name}}</p> 
+                                    </h5>
+                                    <button class="btn p-1 text-danger" type="button" data-bs-dismiss="modal" aria-label="Close">
+                                        <span class="fas fa-times fs-9"> </span>
+                                    </button>
+                                </div>
+                                <div class="modal-body pt-4 pb-2 px-4"> 
+                                    <form id="" action="{% url 'update_dailyForm' s.id %}" method="post" enctype="multipart/form-data" autocomplete="off">
+                                        {% csrf_token %}
+                                    
+                                         
+                                            <div class="mb-2 col-md-12">  
+                                                <div class="form-floating">
+                                                    <input class="form-control" id="floatingInputGridDate1"   value="{{ s.signfile_Date|date:'Y-m-d' }}"  
+                                                        type="date" name="date" required placeholder="Date" />
+                                                    <label for="floatingInputGrid">Date</label>
+                                                </div>
+                                            </div>  
+
+                                            <div class="mb-2 col-md-12">
+                                                <div class="form-floating">
+                                                    <select class="form-select" id="egroupSelect" name="maingroup"
+                                                        required>
+                                                        <option value="0" selected="selected" >Select aircraft type</option>
+                                                        {% for group in groups %}
+                                                        {% if not group.parent_group %}
+                                                        <option 
+                                                         value="{{ group.id }}">{{ group.group_name }}
+                                                        </option>
+                                                        {% endif %}
+                                                        {% endfor %}
+                                                    </select>
+                                                    <label for="egroupSelect">Select Aircraft Type</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-2 col-md-12">
+                                                <div class="form-floating">
+                                                    <select class="form-select" id="esubGroupSelect" name="subgroup">
+                                                        <option value="0" selected="selected" >Select parent aircraft type</option>
+                                                        {% for group in groups %}
+                                                        {% if group.parent_group %}
+                                                        <option class="esubgroup-option" 
+                                                            data-parent="{{ group.parent_group.id }}"
+                                                            value="{{ group.id }}" style="display:none;">
+                                                            {{ group.group_name }}
+                                                        </option>
+                                                        {% endif %}
+                                                        {% endfor %}
+                                                    </select>
+                                                    <label for="subGroupSelect">Select Parent Aircraft Type</label>
+                                                </div>
+                                            </div>
+                                            <div class="mb-2 col-md-12">
+                                                <div class="form-floating"><input class="form-control"
+                                                        id="floatingInputGrid" type="text" name="pdfname" required value="{{s.signfile_Name}}"
+                                                        placeholder="Pdf Name" /><label for="floatingInputGrid">Pdf
+                                                        Name</label></div>
+                                            </div>
+
+
+                                            <div class="mb-2 col-md-12">
+                                                <input class="form-control form-control-lg"
+                                                    id="floatingInputGrid" name="pdffile" type="file"
+                                                    accept=".pdf" />
+
+
+                                            </div>
+                                         
+                                        <div
+                                            class="modal-footer d-flex justify-content-end align-items-center px-4 pb-4 border-0 pt-3">
+
+                                            <button class="btn btn-sm btn-primary px-9 fs-10 my-0" type="submit">
+                                                Update
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+
+                    <div class="modal fade" id="viewFile_{{s.id}}" tabindex="-1">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content border border-translucent">
+                                <div class="modal-header justify-content-between border-translucent">
+                                    <h5 class="modal-title text-body-highlight   d-flex align-items-center">
+                                        {{s.signfile_Name}}</p> 
+                                    </h5>
+                                    <button class="btn p-1 text-danger" type="button" data-bs-dismiss="modal" aria-label="Close">
+                                        <span class="fas fa-times fs-9"> </span>
+                                    </button>
+                                </div>
+                                <div class="modal-body pt-4 pb-2 px-4"> 
+                                    <iframe src="{{s.signpdf_file.url}}" style="width: 100%; height: 100vh; border: none;"></iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+                    {% endfor %}
+
+
+
+
+
+
+               
+                </tbody>
+            </table>
+        </div>
+
+
+
+
+        <footer class="footer position-absolute">
+            <div class="row g-0 justify-content-between align-items-center h-100">
+                <div class="col-12 col-sm-auto text-center">
+                    <p class="mb-0 mt-2 mt-sm-0 text-body">
+                        Falcon iOS Application<span class="d-none d-sm-inline-block"></span><span
+                            class="d-none d-sm-inline-block mx-1">|</span><br class="d-sm-none" />2024 ~ <span id="year"></span><script>document.getElementById("year").textContent = new Date().getFullYear();</script> &copy;
+                    </p>
+                </div>
+                <div class="col-12 col-sm-auto text-center">
+                    <p class="mb-0 text-body-tertiary text-opacity-85">v1</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<script>
+    // Get the current date in 'YYYY-MM-DD' format
+    const today = new Date().toISOString().split('T')[0];
+
+    // Set today's date as the default value and minimum date
+    const dateInput = document.getElementById('floatingInputGridDate');
+    dateInput.value = today;
+    dateInput.min = today; // Prevent selecting previous dates
+</script>
+
+<script> 
+    const today2 = new Date().toISOString().split('T')[0]; 
+    const dateInput2 = document.getElementById('floatingInputGridDate1');
+    // dateInput2.value = today2;
+    dateInput2.min = today2; // Prevent selecting previous dates
+</script>
+<script>
+    document.getElementById('groupSelect').addEventListener('change', function () {
+        var groupId = this.value;
+        var subGroupSelect = document.getElementById('subGroupSelect');
+        var subGroupOptions = document.querySelectorAll('.subgroup-option');
+        subGroupSelect.selectedIndex = 0;
+        subGroupOptions.forEach(function (option) {
+            option.style.display = 'none';
+        });
+        subGroupOptions.forEach(function (option) {
+            if (option.getAttribute('data-parent') == groupId) {
+                option.style.display = 'block';
+            }
+        });
+    });
+</script>
+<script>
+    document.getElementById('egroupSelect').addEventListener('change', function () {
+        var groupId = this.value;
+        var esubGroupSelect = document.getElementById('esubGroupSelect');
+        var esubGroupOptions = document.querySelectorAll('.esubgroup-option');
+        esubGroupSelect.selectedIndex = 0;
+        esubGroupOptions.forEach(function (option) {
+            option.style.display = 'none';
+        });
+        esubGroupOptions.forEach(function (option) {
+            if (option.getAttribute('data-parent') == groupId) {
+                option.style.display = 'block';
+            }
+        });
+    });
+</script>
+ 
+
+{% if saved_message %}
+
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="liveToast" class="toast slide-in-right align-items-center text-bg-primary border-0" role="alert"
+        aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">{{ saved_message }}</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const toastLiveExample = document.getElementById("liveToast");
+        const toastBootstrap =
+            bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+        toastBootstrap.show();
+    });
+</script>
+
+{% endif %}
+
+<script>
+    document.getElementById('searchInput').addEventListener('keyup', function() {
+        let filter = this.value.toLowerCase();
+        let rows = document.querySelectorAll('#fileTable tbody tr');
+
+        rows.forEach(row => {
+            let text = row.textContent.toLowerCase();
+            if (text.includes(filter)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+<style>
+    .slide-in-right {
+        transform: translateX(100%);
+        animation: slide-in 1s forwards;
+    }
+
+    @keyframes slide-in {
+        from {
+            transform: translateX(100%);
+        }
+
+        to {
+            transform: translateX(0);
+        }
+    }
+</style>
+
+<script>
+    var navLink = document.getElementById("nav21");
+    navLink.classList.add("active");
+</script>
+{% endblock %}

@@ -1,0 +1,335 @@
+{% extends 'admin/admin_navbar.html' %}
+{% block content %}
+{% load static %}
+
+<style>
+  .form-icon-container .form-icon-input,
+  .form-icon-container .form-icon-label {
+    padding-left: 1rem !important;
+  }
+
+  .form-icon-container .form-icon-eye {
+    position: absolute;
+    top: 10px !important;
+    right: 1rem !important;
+    font-size: 22px;
+  }
+</style>
+
+<div class="content">
+  <form id="createUserForm" class="mb-9" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="row g-3 flex-between-end mb-6">
+      <div class="col-auto">
+        <h2 class="mb-2">Create user</h2>
+      </div>
+      <div class="col-auto">
+        <a href="{% url 'users' %}" class="btn btn-phoenix-secondary me-2 mb-2 mb-sm-0" type="button">Cancel</a>
+        <button id="saveUserBtn" class="btn btn-primary mb-2 mb-sm-0" type="button">Save user</button>
+      </div>
+    </div>
+
+
+    <div class="row g-3">
+      <div class="col-lg-4 mb-3">
+        <label class="text-body-highlight fw-bold mb-2">First Name</label>
+        <input class="form-control form-control-lg" name="firstname" type="text" placeholder="Enter First name">
+      </div>
+      <div class="col-lg-4 mb-3">
+        <label class="text-body-highlight fw-bold mb-2">Last Name</label>
+        <input class="form-control form-control-lg" name="lastname" type="text" placeholder="Enter Last name">
+      </div>
+
+      <div class="col-lg-4 mb-3">
+        <label class="text-body-highlight fw-bold mb-2">Designation</label>
+        <select class="form-select form-select-lg" name="desig">
+          {% for d in des %}
+
+          <option value="{{d.id}}">{{d.designation}}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+
+      <div class="col-lg-12 mb-3 border-1"> 
+        <div class="card"> 
+            <div class="card-body">
+                <h5 class="card-title">Select Aircraft Type</h5>
+                <div class="row g-3"> 
+                    {% for group in groups %}
+                    <div class="col-2">
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="checkbox" name="groups" value="{{ group.id }}" />
+                          <label class="form-check-label">{{ group.group_name }}</label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div> 
+        </div> 
+      </div>
+    
+
+      
+
+
+
+
+
+
+
+
+
+
+      <!--  <label class="text-body-highlight fw-bold mb-2">Group</label>
+        <select class="form-select form-select-lg" name="group">
+          {% for g in group %}
+          <option value="{{g.id}}">{{g.group_name}}</option>
+          {% endfor %}
+        </select> -->
+
+
+
+
+
+
+ 
+   
+        <div class="col-lg-4 mb-3">
+            <div class="row">
+                <div class="col">
+                    <label class="text-body-highlight fw-bold mb-2">Profile Picture</label>
+                </div>
+                <div class="col-auto">
+                    <label class="form-check-label" for="inlineCheckbox1">Use Default</label>
+                    <input class="form-check-input" id="inlineCheckbox1" type="checkbox" value="option1" checked />
+                </div>
+            </div>
+            
+            <input class="form-control form-control-lg" name="profilepic" type="file" disabled
+            accept=".jpg, .jpeg, .png, .gif, .bmp, .tiff">
+        </div>
+    
+
+
+      
+      <div class="col-lg-3 mb-3">
+        <label class="text-body-highlight fw-bold mb-2">Email Address</label>
+        <input class="form-control form-control-lg" name="email" type="text" placeholder="Enter email address">
+      </div>
+
+      <div class="col-lg-3 mb-3">
+        <label class="text-body-highlight fw-bold mb-2">Phone Number</label>
+        <input class="form-control form-control-lg" name="phone" type="text" placeholder="Enter phone number">
+      </div>
+      
+    <div class="col-lg-2 mb-3">
+        <label class="text-body-highlight fw-bold mb-2">Weight (Kg)</label>
+        <input class="form-control form-control-lg" name="weight" type="number" placeholder="Enter weight in Kg">
+      </div>
+
+      
+      
+      <div class="col-lg-4 mb-3">
+        <label class="text-body-highlight fw-bold mb-2">Username</label>
+        <input class="form-control form-control-lg" name="username" type="text" placeholder="Enter Username">
+      </div>
+
+
+      <div class="col-lg-4 mb-3">
+        <label class="text-body-highlight fw-bold mb-2">Password</label>
+        <!-- <input class="form-control form-control-lg" name="password" type="password" placeholder="Enter Password"> -->
+
+
+        <div class="form-icon-container" data-password="data-password">
+          <input class="form-control form-control-lg form-icon-input" placeholder="Enter password" name="password"
+            id="password" type="password" />
+          <span class="uil uil-eye form-icon-eye" id="togglePassword"></span>
+        </div>
+
+
+      </div>
+      <div class="col-lg-4 mb-3">
+        <label class="text-body-highlight fw-bold mb-2">Confirm Password</label>
+        <!-- <input class="form-control form-control-lg" name="confirm_password" type="password" placeholder="Confirm Password"> -->
+        <div class="form-icon-container" data-password="data-password">
+          <input class="form-control form-control-lg form-icon-input" placeholder="Enter confirm password"
+            name="confirm_password" id="password2" type="password" />
+          <span class="uil uil-eye form-icon-eye" id="togglePassword2"></span>
+        </div>
+      </div>
+
+
+
+      <div class="col-lg-4 mb-3">
+        <label class="text-body-highlight fw-bold mb-2">Gender</label>
+        <select class="form-select form-select-lg" name="gender">
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="col-lg-4 mb-3">
+        <label class="text-body-highlight fw-bold mb-2">Date Of Birth</label>
+        <input class="form-control form-control-lg" name="dob" type="date" placeholder="Enter Date of Birth">
+      </div>
+
+      <!-- <div class="col-lg-6 mb-3">
+        <label class="text-body-highlight fw-bold mb-2">Age</label>
+        <input class="form-control form-control-lg" name="age" type="text" placeholder="Enter Age">
+      </div> -->
+
+      <div class="col-lg-4 mb-3">
+        <label class="text-body-highlight fw-bold mb-2">Signature</label>
+        <input class="form-control form-control-lg" name="usersign" type="file" accept=".jpg, .jpeg, .png, .gif, .bmp, .tiff">
+      </div>
+
+
+      <div class="col-lg-12 mb-3">
+        <label class="text-body-highlight fw-bold mb-2">Location</label>
+        <input class="form-control form-control-lg" name="location" type="text" placeholder="Enter Address">
+      </div>
+
+    </div>
+
+  </form>
+  <footer class="footer position-absolute">
+    <div class="row g-0 justify-content-between align-items-center h-100">
+      <div class="col-12 col-sm-auto text-center">
+        <p class="mb-0 mt-2 mt-sm-0 text-body">Falcon iOS Application<span class="d-none d-sm-inline-block"></span><span
+            class="d-none d-sm-inline-block mx-1">|</span><br class="d-sm-none" />2024 ~ <span id="year"></span><script>document.getElementById("year").textContent = new Date().getFullYear();</script> &copy;</p>
+      </div>
+      <div class="col-12 col-sm-auto text-center">
+        <p class="mb-0 text-body-tertiary text-opacity-85">v1</p>
+      </div>
+    </div>
+  </footer>
+</div>
+
+
+<style>
+  div#liveToast{ 
+  border-left: 4px solid #5cb85c !important; 
+}
+div#liveErrorToast{ 
+  border-left: 4px solid #ff0505 !important; 
+}
+</style>
+
+<div class="toast-container position-fixed top-0 end-0 p-3">
+  <!-- Success Toast -->
+  <div id="liveToast" class="toast slide-in-right align-items-center text-bg-success border-0" role="alert"
+    aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        User Created Successfully
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+        aria-label="Close"></button>
+    </div>
+  </div>
+
+  <!-- Error Toast -->
+  <div id="liveErrorToast" class="toast slide-in-right align-items-center text-bg-danger border-0" role="alert"
+    aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        Error occurred while creating the user
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+        aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .slide-in-right {
+    transform: translateX(100%);
+    animation: slide-in 1s forwards;
+  }
+
+  @keyframes slide-in {
+    from {
+      transform: translateX(100%);
+    }
+
+    to {
+      transform: translateX(0);
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', (event) => {
+      // Get the checkbox and file input elements
+      const checkbox = document.getElementById('inlineCheckbox1');
+      const fileInput = document.querySelector('input[name="profilepic"]');
+
+      // Add an event listener to the checkbox
+      checkbox.addEventListener('change', function() {
+          // Toggle the disabled property of the file input based on the checkbox state
+          fileInput.disabled = this.checked;
+      });
+
+      // Initial state based on the checkbox default checked value
+      fileInput.disabled = checkbox.checked;
+  });
+</script>
+
+
+<script>
+  document.getElementById('saveUserBtn').addEventListener('click', function () {
+    var formData = new FormData(document.getElementById('createUserForm'));
+
+    fetch("{% url 'save_user' %}", {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'X-CSRFToken': '{{ csrf_token }}'
+      }
+    }).then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          const toastLiveExample = document.getElementById('liveToast');
+          const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+          toastBootstrap.show();
+
+          setTimeout(function () {
+            window.location.href = "/web/users/view/" + data.id;
+          }, 1500);
+        } else {
+          const liveErrorToastElement = document.getElementById('liveErrorToast');
+          const liveErrorToast = bootstrap.Toast.getOrCreateInstance(liveErrorToastElement);
+          document.querySelector('#liveErrorToast .toast-body').textContent = data.message || 'Error occurred while creating the user';
+          liveErrorToast.show();
+        }
+      }).catch(error => {
+        // console.error('Error:', error);
+        const liveErrorToastElement = document.getElementById('liveErrorToast');
+        const liveErrorToast = bootstrap.Toast.getOrCreateInstance(liveErrorToastElement);
+        document.querySelector('#liveErrorToast .toast-body').textContent = 'Error: ' + error.message;
+        liveErrorToast.show();
+      });
+  });
+</script>
+
+<script>
+  document.getElementById('togglePassword').addEventListener('click', function () {
+    const passwordInput = document.getElementById('password');
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+    this.classList.toggle('uil-eye-slash'); // Toggle icon
+  });
+  document.getElementById('togglePassword2').addEventListener('click', function () {
+    const passwordInput2 = document.getElementById('password2');
+    const type = passwordInput2.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput2.setAttribute('type', type);
+    this.classList.toggle('uil-eye-slash'); // Toggle icon
+  });
+</script>
+
+<script>
+  var navLink = document.getElementById('nav2');
+  navLink.classList.add('active');
+</script>
+{% endblock %}

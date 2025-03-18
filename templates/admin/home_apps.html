@@ -1,0 +1,398 @@
+{% extends 'admin/admin_navbar.html' %}
+{% block content %}
+{% load static %}
+
+
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" ">
+                <div class="card-body">
+                    <div class="mx-n4 px-4  bg-body-emphasis">
+                        <div>
+
+                            <div class="row gx-5">
+                                <div class="col-12">
+
+                                    <div class="">
+                                        <div
+                                            data-list='{"valueNames":["name","url"],"page":10}'>
+                                            <div class="row align-items-end justify-content-between pb-5 g-3">
+                                                <div class="col-auto">
+                                                    <h2 class="mb-3">Applications</h2>
+
+                                                </div>
+                                                <div class="col-12 col-md-auto">
+                                                    <div class="row g-2 gy-3">
+                                                        <div class="col-auto flex-1">
+                                                            <div class="search-box">
+                                                                <form class="position-relative"><input
+                                                                        class="form-control search-input search form-control-sm"
+                                                                        type="search" placeholder="Search"
+                                                                        aria-label="Search" />
+                                                                    <span class="fas fa-search search-box-icon"></span>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-auto">
+                                                            <!-- <button class="btn btn-sm btn-phoenix-primary bg-body-emphasis bg-body-hover me-2"
+                                                                type="button">Add Application</button> -->
+
+                                                            <button class="btn btn-primary me-4 btn-sm" type="button"
+                                                                data-bs-toggle="modal" data-bs-target="#addDealModal"
+                                                                aria-haspopup="true" aria-expanded="false"
+                                                                data-bs-reference="parent"><span
+                                                                    class="fas fa-plus me-2"></span>Add
+                                                                Application</button>
+
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="table-responsive mx-n1 px-1 scrollbar">
+                                                <table class="table fs-9 mb-0 border-top border-translucent">
+                                                    <thead>
+                                                        <tr>
+
+                                                            <th class="sort white-space-nowrap align-middle"
+                                                                scope="col"></th>
+                                                            <th class="sort white-space-nowrap align-middle" scope="col"
+                                                                style="min-width:360px;" data-sort="name">NAME
+                                                            </th>
+                                                            <th class="sort align-middle" scope="col"
+                                                                data-sort="url" style="min-width:200px;">URL
+                                                            </th>
+                                                            <th class="sort align-middle" scope="col" data-sort="rating"
+                                                                style="min-width:110px;">COLORCODE</th>
+
+                                                            <th class="sort text-end pe-0 align-middle" scope="col">
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="list" id="table-latest-review-body">
+
+                                                        {% for a in apps %}
+                                                        <tr
+                                                            class="hover-actions-trigger btn-reveal-trigger position-static">
+
+                                                            <td class="align-middle  white-space-nowrap py-0">
+
+                                                                <img src="{{a.app_icon.url}}" alt="" width="53">
+
+                                                            </td>
+
+                                                            <td class="align-middle name white-space-nowrap"><a
+                                                                    class="fw-semibold"
+                                                                    href="apps/e-commerce/landing/product-details.html">
+                                                                    {{a.app_name}}</a></td>
+
+                                                            <td class="align-middle url white-space-nowrap">
+                                                                <p>
+                                                                    <a href="{{a.app_url}}"
+                                                                        target="_blank">{{a.app_url}}</a>
+                                                                </p>
+                                                            </td>
+
+                                                            <td class="align-middle text-start ps-5 status"><span
+                                                                    class="badge badge-phoenix fs-10"
+                                                                    style="border: 1px solid rgba(0, 0, 0, 0.098); background-color: {{a.color}};"><span
+                                                                        class="badge-label text-dark">{{a.color}}</span><span
+                                                                        class="ms-1"
+                                                                        style="height:12.8px;width:12.8px;"></span></span>
+                                                            </td>
+
+                                                            <td class="align-middle white-space-nowrap text-end pe-0">
+                                                                <div class="position-relative">
+                                                                    <div class="hover-actions">
+
+                                                                        <button
+                                                                            class="btn btn-sm btn-phoenix-secondary me-1 fs-10"
+                                                                      
+                                                                            type="button" data-bs-toggle="modal" data-bs-target="#exampleModal_{{a.id}}"><span
+                                                                                class="fas fa-edit"></span></button>
+
+
+                                                                        <button
+                                                                            class="btn btn-sm btn-phoenix-secondary fs-10"  
+                                                                            type="button" data-bs-toggle="modal" data-bs-target="#deleteexampleModal_{{a.id}}"
+                                                                            
+                                                                            ><span
+                                                                                class="fas fa-trash"></span></button>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="btn-reveal-trigger position-static"><button
+                                                                        class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10"
+                                                                        type="button" data-bs-toggle="dropdown"
+                                                                        data-boundary="window" aria-haspopup="true"
+                                                                        aria-expanded="false"
+                                                                        data-bs-reference="parent"><span
+                                                                            class="fas fa-ellipsis-h fs-10"></span></button>
+
+                                                                </div>
+                                                            </td>
+
+
+                                                        </tr>
+
+
+                                                         
+                                                            <div class="modal fade" id="deleteexampleModal_{{a.id}}" tabindex="-1" aria-hidden="true">
+                                                              <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                  <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalLabel">Delete {{a.app_name}} Application</h5><button class="btn btn-close p-1" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                  </div>
+                                                                  <div class="modal-body">
+                                                                    <p class="text-body-tertiary lh-lg mb-0">
+                                                                        Are you sure you want to delete {{a.app_name}} application?
+                                                                    </p>
+                                                                  </div>
+                                                                  <div class="modal-footer">
+                                                                    <a href="{% url 'delete_app' a.id %}" class="btn btn-primary text-white" type="button">Delete</a>
+                                                                    
+                                                                    
+                                                                    <button class="btn btn-outline-primary" type="button" data-bs-dismiss="modal">Cancel</button></div>
+                                                                </div>
+                                                              </div>
+                                                            </div>
+                                                       
+
+
+
+
+
+
+
+
+
+                                                        <div class="modal fade" id="exampleModal_{{a.id}}" tabindex="-1" aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="exampleModalLabel">Edit {{a.app_name}} Application</h5><button class="btn btn-close p-1"
+                                                                            type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    </div>
+                                                                    <form action="{% url 'update_app' a.id %}" method="post" enctype="multipart/form-data">
+                                                                        {% csrf_token %}
+
+                                                                    <div class="modal-body">
+                                                                        <div class="mb-2">
+                                                                            <label class="text-body-highlight fw-bold mb-2">App Name</label>
+                                                                            <input class="form-control" type="text" placeholder="Enter app name" value="{{a.app_name}}" name="appname" required />
+                                                                        </div>
+                                                                        <div class="mb-2">
+                                                                            <label class="text-body-highlight fw-bold mb-2">App link</label>
+                                                                            <input class="form-control" type="text" placeholder="Enter app name" value="{{a.app_url}}" name="applink" required />
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-10">
+                                                                                <div class="mb-2">
+                                                                                    <label class="text-body-highlight fw-bold mb-2">App Icon</label>
+                                                                                    <input id="imageInput" class="form-control" type="file" accept=".png,.jpg,.jpeg"
+                                                                                        placeholder="Enter app icon" name="appicon" />
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-2">
+                                                                                <div class="mb-2 "><label class="text-body-highlight fw-bold mb-2"> Color</label><input
+                                                                                    class="form-control form-control-color" type="color" value="{{a.color}}" placeholder="Enter app link"
+                                                                                    required name="app_color" /></div>
+        
+                                                                            </div>
+                                                                        </div>
+                                                                        
+                                                                         
+                                                                    </div>
+                                                                    <div class="modal-footer"><button class="btn btn-primary" type="submit">Okay</button><button
+                                                                            class="btn btn-outline-primary" type="button" data-bs-dismiss="modal">Cancel</button></div>
+                                                                        </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+
+
+                                                        {% endfor %}
+
+
+
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="row align-items-center py-1">
+                                                <div class="pagination d-none"></div>
+                                                <div class="col d-flex fs-9">
+                                                    <p class="mb-0 d-none d-sm-block me-3 fw-semibold text-body"
+                                                        data-list-info="data-list-info"></p><a class="fw-semibold"
+                                                        href="#!" data-list-view="*">View all<span
+                                                            class="fas fa-angle-right ms-1"
+                                                            data-fa-transform="down-1"></span></a><a
+                                                        class="fw-semibold d-none" href="#!" data-list-view="less">View
+                                                        Less</a>
+                                                </div>
+                                                <div class="col-auto d-flex">
+                                                    <button class="btn btn-link px-1 me-1" type="button"
+                                                        title="Previous" data-list-pagination="prev"><span
+                                                            class="fas fa-chevron-left me-2"></span>Previous</button><button
+                                                        class="btn btn-link px-1 ms-1" type="button" title="Next"
+                                                        data-list-pagination="next">Next<span
+                                                            class="fas fa-chevron-right ms-2"></span></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+
+
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+ 
+
+    <footer class="footer position-absolute">
+        <div class="row g-0 justify-content-between align-items-center h-100">
+            <div class="col-12 col-sm-auto text-center">
+                <p class="mb-0 mt-2 mt-sm-0 text-body">Falcon iOS Application<span
+                        class="d-none d-sm-inline-block"></span><span class="d-none d-sm-inline-block mx-1">|</span><br
+                        class="d-sm-none" />2024 ~ <span id="year"></span><script>document.getElementById("year").textContent = new Date().getFullYear();</script> &copy;</p>
+            </div>
+            <div class="col-12 col-sm-auto text-center">
+                <p class="mb-0 text-body-tertiary text-opacity-85">v1</p>
+            </div>
+        </div>
+    </footer>
+
+
+</div>
+
+
+
+<div class="modal fade" id="addDealModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="addDealModal" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content bg-body-highlight p-6">
+        <form  action="{% url 'save_app' %}" enctype="multipart/form-data"
+            method="post">
+
+            <div class="modal-header justify-content-between border-0 p-0 mb-2">
+                <h3 class="mb-0">Add Application</h3><button class="btn btn-sm btn-phoenix-secondary"
+                    data-bs-dismiss="modal" aria-label="Close"><span class="fas fa-times text-danger"></span></button>
+            </div>
+            <div class="modal-body px-0">
+                <div class="row g-4">
+                    {% csrf_token %}
+                    <div class="col-lg-6">
+
+                        <div class="mb-0"><label class="text-body-highlight fw-bold mb-2">App Name</label><input
+                                class="form-control" type="text" placeholder="Enter app name" name="appname" required />
+                        </div>
+
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="mb-0">
+                            <label class="text-body-highlight fw-bold mb-2">App Icon</label>
+                            <input id="imageInput" class="form-control" type="file" accept=".png,.jpg,.jpeg" required
+                                placeholder="Enter app icon" name="appicon" />
+                        </div>
+                    </div>
+                    <div class="col-lg-10">
+
+                        <div class=""><label class="text-body-highlight fw-bold mb-2">App Url</label><input
+                                class="form-control" type="text" placeholder="Enter app link" name="applink" required />
+                        </div>
+
+                    </div>
+                    <div class="col-lg-2">
+
+                        <div class=" "><label class="text-body-highlight fw-bold mb-2"> Color</label><input
+                                class="form-control form-control-color" type="color" placeholder="Enter app link"
+                                required name="app_color" /></div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0 "><button class="btn btn-link text-danger px-3 my-0"
+                    data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                <button class="btn btn-primary my-0" type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+    </div>
+</div>
+</div>
+
+
+
+{% if saved_message %}
+
+
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="liveToast" class="toast slide-in-right align-items-center text-bg-primary border-0" role="alert"
+        aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                {{ saved_message }}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const toastLiveExample = document.getElementById('liveToast');
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+        toastBootstrap.show();
+    });
+</script>
+
+{% endif %}
+
+
+<style>
+    .slide-in-right {
+        transform: translateX(100%);
+        animation: slide-in 1s forwards;
+    }
+
+    @keyframes slide-in {
+        from {
+            transform: translateX(100%);
+        }
+
+        to {
+            transform: translateX(0);
+        }
+    }
+</style>
+
+
+
+
+
+
+
+
+
+<script>
+    var navLink = document.getElementById('nav7');
+    navLink.classList.add('active');
+</script>
+{% endblock %}

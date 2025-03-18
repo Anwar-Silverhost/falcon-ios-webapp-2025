@@ -1,0 +1,353 @@
+{% extends 'admin/admin_navbar.html' %}
+{% block content %}
+{% load static %}
+
+
+<div class="content">
+
+    <div class="pb-6">
+        <div class="row align-items-center justify-content-between g-3 mb-0">
+            <div class="col-12 col-md-auto">
+                <h2 class="mb-0">Upload PDF</h2>
+            </div>
+
+
+        </div>
+    </div>
+
+
+    <form class="row g-3 mb-6" action="{% url 'savefile' %}" enctype="multipart/form-data" method="post" aria-required="true" autocomplete="off">
+        {% csrf_token %}
+
+        <div class="mb-2 col-sm-6 col-md-6">
+            <div class="form-floating">
+                <select class="form-select" id="groupSelect" name="maingroup" required >
+                    <option selected="selected" value="allaircrafts">All Aircrafts</option>
+                    {% for group in groups %}
+                    {% if not group.parent_group %}
+                    <option value="{{ group.id }}">{{ group.group_name }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+                <label for="groupSelect">Select Aircraft Type</label>
+            </div>
+        </div>
+
+        <div class="mb-2 col-sm-6 col-md-6">
+            <div class="form-floating">
+                <select class="form-select" id="subGroupSelect" name="subgroup">
+                    <option selected="selected" value="0">Select parent aircraft type</option>
+                    {% for group in groups %}
+                    {% if group.parent_group %}
+                    <option class="subgroup-option" data-parent="{{ group.parent_group.id }}" value="{{ group.id }}"
+                        style="display:none;">
+                        {{ group.group_name }}
+                    </option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+                <label for="subGroupSelect">Select Parent Aircraft Type</label>
+            </div>
+        </div>
+
+
+
+
+
+
+        <div class="mb-2 col-sm-6 col-md-6">
+            <div class="form-floating"><input class="form-control" id="floatingInputGrid" type="text" name="pdfname" required
+                    placeholder="Pdf Name" /><label for="floatingInputGrid">Pdf Name</label></div>
+        </div>
+
+
+        <div class="mb-2 col-sm-6 col-md-6"> 
+            <input class="form-control form-control-lg" required id="floatingInputGrid" name="pdffile" type="file" accept=".pdf,.csv,.docx"/>
+
+
+        </div>
+
+
+        <div class="col-sm-6 col-md-12">
+            <div class="form-floating">
+                <select class="form-select" id="menuSelect" name="maincategory" required>
+                    <option  selected="selected" value="0">Select menu</option>
+                    {% for category in categories %}
+                    {% if not category.parent_category %}
+                    <option value="{{ category.id }}">{{ category.category_name }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+                <label for="menuSelect">Select Main Menu</label>
+            </div>
+        </div>
+        
+        <div class="col-sm-6 col-md-12">
+            <div class="form-floating">
+                <select class="form-select" id="parentCategorySelect" name="parentcategory">
+                    <option selected="selected" value="0">Default</option>
+                    {% for category in categories %}
+                    {% if category.parent_category %}
+                    <option class="parent-category-option" data-parent="{{ category.parent_category.id }}" value="{{ category.id }}" style="display:none;">
+                        {{ category.category_name }}
+                    </option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+                <label for="parentCategorySelect">Select Parent Category</label>
+            </div>
+        </div>
+        
+        <div class="col-sm-6 col-md-12">
+            <div class="form-floating">
+                <select class="form-select" id="categorySelect" name="category">
+                    <option selected="selected" value="0">Default</option>
+                    {% for category in categories %}
+                    {% if category.parent_category %}
+                    <option class="category-option" data-parent="{{ category.parent_category.id }}" value="{{ category.id }}" style="display:none;">
+                        {{ category.category_name }}
+                    </option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+                <label for="categorySelect">Select Category</label>
+            </div>
+        </div>
+        
+        <div class="col-sm-6 col-md-12">
+            <div class="form-floating">
+                <select class="form-select" id="subCategorySelect" name="subcategory">
+                    <option selected="selected" value="0">Default</option>
+                    {% for category in categories %}
+                    {% if category.parent_category %}
+                    <option class="sub-category-option" data-parent="{{ category.parent_category.id }}" value="{{ category.id }}" style="display:none;">
+                        {{ category.category_name }}
+                    </option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+                <label for="subCategorySelect">Select Sub Category</label>
+            </div>
+        </div>
+        
+       
+        
+ 
+
+        <div class="col-12 gy-6">
+            <div class="row g-3 justify-content-end">
+                <div class="col-auto"><a href="{% url 'filemanager' %}" class="btn btn-phoenix-primary px-5">Cancel</a>
+                </div>
+                <div class="col-auto"><button type="submit" class="btn btn-primary px-5 px-sm-15" onclick="uploading()">Upload File</button></div>
+            </div>
+        </div>
+    </form>
+
+
+
+
+
+    <footer class="footer position-absolute">
+        <div class="row g-0 justify-content-between align-items-center h-100">
+            <div class="col-12 col-sm-auto text-center">
+                <p class="mb-0 mt-2 mt-sm-0 text-body">Falcon iOS Application<span
+                        class="d-none d-sm-inline-block"></span><span class="d-none d-sm-inline-block mx-1">|</span><br
+                        class="d-sm-none" />2024 ~ <span id="year"></span><script>document.getElementById("year").textContent = new Date().getFullYear();</script> &copy; </p>
+            </div>
+            <div class="col-12 col-sm-auto text-center">
+                <p class="mb-0 text-body-tertiary text-opacity-85">v1</p>
+            </div>
+        </div>
+    </footer>
+
+
+
+
+</div>
+
+
+<script>
+    document.getElementById('groupSelect').addEventListener('change', function () {
+        var groupId = this.value;
+        var subGroupSelect = document.getElementById('subGroupSelect');
+        var subGroupOptions = document.querySelectorAll('.subgroup-option');
+        subGroupSelect.selectedIndex = 0;
+        subGroupOptions.forEach(function (option) {
+            option.style.display = 'none';
+        });
+        subGroupOptions.forEach(function (option) {
+            if (option.getAttribute('data-parent') == groupId) {
+                option.style.display = 'block';
+            }
+        });
+    });
+</script>
+<script>
+    document.getElementById('menuSelect').addEventListener('change', function() {
+        var menuId = this.value;
+        var parentCategorySelect = document.getElementById('parentCategorySelect');
+        var parentCategoryOptions = document.querySelectorAll('.parent-category-option');
+
+        resetDropdown('parentCategorySelect');
+        resetDropdown('categorySelect');
+        resetDropdown('subCategorySelect');
+
+        parentCategoryOptions.forEach(function(option) {
+            option.style.display = 'none';
+        });
+
+        parentCategoryOptions.forEach(function(option) {
+            if (option.getAttribute('data-parent') == menuId) {
+                option.style.display = 'block';
+            }
+        });
+    });
+
+    document.getElementById('parentCategorySelect').addEventListener('change', function() {
+        var parentCategoryId = this.value;
+        var categorySelect = document.getElementById('categorySelect');
+        var categoryOptions = document.querySelectorAll('.category-option');
+
+        resetDropdown('categorySelect');
+        resetDropdown('subCategorySelect');
+
+        categoryOptions.forEach(function(option) {
+            option.style.display = 'none';
+        });
+
+        categoryOptions.forEach(function(option) {
+            if (option.getAttribute('data-parent') == parentCategoryId) {
+                option.style.display = 'block';
+            }
+        });
+    });
+
+    document.getElementById('categorySelect').addEventListener('change', function() {
+        var categoryId = this.value;
+        var subCategorySelect = document.getElementById('subCategorySelect');
+        var subCategoryOptions = document.querySelectorAll('.sub-category-option');
+
+        resetDropdown('subCategorySelect');
+
+        subCategoryOptions.forEach(function(option) {
+            option.style.display = 'none';
+        });
+
+        subCategoryOptions.forEach(function(option) {
+            if (option.getAttribute('data-parent') == categoryId) {
+                option.style.display = 'block';
+            }
+        });
+    });
+
+    function resetDropdown(dropdownId) {
+        var dropdown = document.getElementById(dropdownId);
+        dropdown.selectedIndex = 0;
+    }
+</script>
+
+
+
+
+
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="liveToast_loader" class="toast slide-in-right align-items-center text-bg-primary border-0"
+        role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                <img src="../../static/images/upload-file.gif" alt="this slowpoke moves" width="50" />
+                File Uploading....
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    function uploading() { 
+        const liveToast_loader = document.getElementById('liveToast_loader'); 
+        liveToast_loader.style.display = 'block';
+        liveToast_loader.style.opacity = '1'; 
+        liveToast_loader.classList.add('show');
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(liveToast_loader);
+        toastBootstrap.show();
+    
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% if saved_message %}
+
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="liveToast" class="toast slide-in-right align-items-center text-bg-primary border-0" role="alert"
+        aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                {{saved_message}}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.onload = function () {
+        const toastLiveExample = document.getElementById('liveToast');
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+        toastBootstrap.show();
+    };
+</script>
+
+{% endif %}
+
+
+
+<style>
+    .slide-in-right {
+        transform: translateX(100%);
+        animation: slide-in 1s forwards;
+    }
+
+    @keyframes slide-in {
+        from {
+            transform: translateX(100%);
+        }
+
+        to {
+            transform: translateX(0);
+        }
+    }
+</style>
+
+
+
+
+
+
+
+
+
+<script>
+    var navLink = document.getElementById('nav6');
+    navLink.classList.add('active');
+</script>
+{% endblock %}
