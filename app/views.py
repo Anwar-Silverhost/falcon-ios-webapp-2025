@@ -25,3 +25,13 @@ def admin_logout(request):
 
 def web(request):
     return redirect('/')
+
+
+
+# new section
+
+def privacy_policy(request):
+    return render(request, 'privacy_policy.html') 
+
+def support(request):
+    return render(request, 'support.html') 

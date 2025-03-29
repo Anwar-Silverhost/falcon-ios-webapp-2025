@@ -18,6 +18,11 @@ urlpatterns = [
 
     #API SERVICE
     path('api/', include('api.urls')),
+
+
+    path('privacy-policy', views.privacy_policy, name='privacy_policy'),
+    path('support', views.support, name='support'),
+    
     
         
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
